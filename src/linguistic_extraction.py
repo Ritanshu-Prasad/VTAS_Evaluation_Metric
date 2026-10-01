@@ -35,6 +35,8 @@ class LinguisticExtractionModule:
         "photo", "picture", "image", "scene", "view", "area",
         "side", "top", "bottom", "front", "back", "middle",
         "way", "kind", "type", "set", "bit", "part",
+        "caption", "color", "background", "room", "bedroom", 
+        "kitchen", "bathroom", "living", "outside", "inside"
     }
 
     def __init__(self, model_name: str = "en_core_web_sm"):
