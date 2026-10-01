@@ -4,7 +4,7 @@ VTAS (Visual-Truth Alignment Score) — Core Evaluator.
 This is the primary interface for the VTAS evaluation framework. It
 orchestrates four sub-modules into a two-tier scoring pipeline:
 
-    Tier 1 (Object-Level):  DETR + spaCy + MiniLM
+    Tier 1 (Object-Level):  DETR + spaCy + MiniLM (phrase-based)
     Tier 2 (Scene-Level):   CLIP fallback for ungrounded nouns
 
 Usage:
@@ -17,7 +17,7 @@ Usage:
     )
     print(result['vtas_score'])
 
-Mathematical Formulation (v1.1 — Two-Tier):
+Mathematical Formulation (v1.2 — F-beta Score):
     Given:
         V = set of objects detected by DETR in the image
         T = set of nouns extracted from the generated caption
@@ -32,14 +32,27 @@ Mathematical Formulation (v1.1 — Two-Tier):
         M_2 = {u in U : sim_CLIP(image, u) >= tau_2}
         H   = U - M_2   (true hallucinations)
 
-    Visual Recall (VR):
-        VR = |{v in V : max_t sim(t,v) >= tau_1}| / |V|
+    Object Precision (P):
+        P = 1 - (|H| / |T|)   = fraction of caption nouns that are grounded
+        When |T| = 0: P = 1.0  (no claims made => no false claims)
 
-    Hallucination Rate (HR):
-        HR = |H| / |T|
+    Visual Recall (R):
+        R = |{v in V : matched}| / |V|   = fraction of detected objects mentioned
+        When |V| = 0: R = 1.0  (nothing to miss => perfect recall)
 
-    VTAS Score:
-        VTAS = VR * (1 - HR)
+    VTAS Score (F-beta):
+        VTAS = (1 + beta^2) * (P * R) / (beta^2 * P + R)
+        When P + R = 0: VTAS = 0.0
+
+        beta = 1.0 (default): Equal weight to precision and recall (F1).
+        beta < 1.0: Precision-weighted (penalize hallucinations more).
+        beta > 1.0: Recall-weighted (penalize missing objects more).
+
+    The F-beta score is the harmonic mean of P and R, a standard
+    combination from Information Retrieval (van Rijsbergen, 1979).
+    Unlike a weighted arithmetic mean (alpha*P + beta*R), it has no
+    arbitrary weights — the single parameter beta has a precise
+    mathematical interpretation as the ratio of importance.
 
     Range: [0, 1] where 1.0 = perfect alignment, 0.0 = complete failure.
 """
@@ -75,6 +88,7 @@ class VTASEvaluator:
         detection_confidence: float = 0.7,
         similarity_threshold: float = 0.65,
         clip_threshold: float = 0.22,
+        beta: float = 1.0,
         spacy_model: str = "en_core_web_sm",
     ):
         """
@@ -85,12 +99,16 @@ class VTASEvaluator:
                 object detection. Lower values increase recall but may
                 introduce noisy detections.
             similarity_threshold: Minimum cosine similarity for the
-                Semantic Bridge (Tier 1) to consider two words as
-                equivalent. Lowered from 0.75 to 0.65 to better handle
-                synonyms like "player"<->"person" and "couch"<->"sofa".
+                Semantic Bridge (Tier 1, phrase-based) to consider two
+                words as equivalent.
             clip_threshold: Minimum CLIP image-text similarity for
                 Tier 2 context verification. CLIP scores are inherently
                 lower than text-text similarity scores.
+            beta: The F-beta parameter controlling the precision-recall
+                tradeoff. beta=1.0 (F1) gives equal weight. beta<1.0
+                penalizes hallucinations more. beta>1.0 penalizes
+                missing objects more. This is the standard van Rijsbergen
+                (1979) formulation — no arbitrary weights.
             spacy_model: The spaCy language model for noun extraction.
 
         Note:
@@ -98,6 +116,7 @@ class VTASEvaluator:
             DETR (~160MB), MiniLM (~80MB), CLIP (~600MB), spaCy (~12MB).
             Subsequent runs use the Hugging Face cache.
         """
+        self.beta = beta
         print("[VTAS] Initializing Visual Grounding Module (DETR)...")
         self.visual_module = VisualGroundingModule(
             confidence_threshold=detection_confidence
@@ -174,26 +193,41 @@ class VTASEvaluator:
             noun for noun, _ in clip_result["hallucinated"]
         ]
 
-        # --- Stage 5: Compute Final VTAS Score ---
+        # --- Stage 5: Compute Final VTAS Score (F-beta) ---
         num_detected = len(detected_objects)
         num_text_nouns = len(text_nouns)
         num_matched_det = num_detected - len(alignment["missed"])
         num_hallucinated = len(final_hallucinated)
 
-        # Handle edge cases to prevent division by zero
-        visual_recall = (
-            num_matched_det / num_detected if num_detected > 0 else 0.0
-        )
-        hallucination_rate = (
-            num_hallucinated / num_text_nouns if num_text_nouns > 0 else 0.0
+        # Object Precision: fraction of caption nouns that are grounded.
+        # When no nouns were extracted, precision is 1.0 (no false claims).
+        precision = (
+            1.0 - (num_hallucinated / num_text_nouns)
+            if num_text_nouns > 0 else 1.0
         )
 
-        vtas_score = visual_recall * (1 - hallucination_rate)
+        # Visual Recall: fraction of detected objects mentioned.
+        # When no objects were detected, recall is 1.0 (nothing to miss).
+        recall = (
+            num_matched_det / num_detected
+            if num_detected > 0 else 1.0
+        )
+
+        # F-beta Score: harmonic mean of Precision and Recall.
+        # beta = 1.0 => F1 (equal weight)
+        # beta < 1.0 => precision-weighted (penalize hallucinations)
+        # beta > 1.0 => recall-weighted (penalize missing objects)
+        beta_sq = self.beta ** 2
+        denominator = (beta_sq * precision) + recall
+        vtas_score = (
+            (1 + beta_sq) * (precision * recall) / denominator
+            if denominator > 0 else 0.0
+        )
 
         return {
             "vtas_score": round(vtas_score, 4),
-            "visual_recall": round(visual_recall, 4),
-            "hallucination_rate": round(hallucination_rate, 4),
+            "precision": round(precision, 4),
+            "recall": round(recall, 4),
             "detected_objects": detected_objects,
             "text_nouns": text_nouns,
             "matched": alignment["matched"],
@@ -241,11 +275,11 @@ class VTASEvaluator:
 def _print_report(result: dict) -> None:
     """Formats and prints a human-readable VTAS diagnostic report."""
     print("=" * 60)
-    print("          VTAS v1.1 DIAGNOSTIC REPORT")
+    print("          VTAS v1.2 DIAGNOSTIC REPORT")
     print("=" * 60)
-    print(f"  VTAS Score:          {result['vtas_score']:.4f}")
-    print(f"  Visual Recall:       {result['visual_recall']:.4f}")
-    print(f"  Hallucination Rate:  {result['hallucination_rate']:.4f}")
+    print(f"  VTAS Score (F-beta): {result['vtas_score']:.4f}")
+    print(f"  Object Precision:    {result['precision']:.4f}")
+    print(f"  Visual Recall:       {result['recall']:.4f}")
     print("-" * 60)
     print(f"  DETR Detected:       {result['detected_objects']}")
     print(f"  Caption Nouns:       {result['text_nouns']}")

@@ -131,9 +131,9 @@ def generate_illustration(
         boxstyle='round,pad=0.5', facecolor='#e6f2ff', edgecolor='#b3d9ff'
     )
     score_text = (
-        f"Visual Recall: {result['visual_recall']:.2f}\n"
-        f"Hallucination Rate: {result['hallucination_rate']:.2f}\n"
-        f"Final VTAS Score: {result['vtas_score']:.2f}"
+        f"Object Precision: {result['precision']:.2f}\n"
+        f"Visual Recall: {result['recall']:.2f}\n"
+        f"VTAS Score (F1): {result['vtas_score']:.2f}"
     )
     ax_text.text(0.0, y_pos, score_text, fontsize=13,
                  fontweight='bold', bbox=box_props)

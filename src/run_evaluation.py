@@ -159,13 +159,17 @@ def run_evaluation(args):
         caption = generate_caption(model, processor, image, device)
         score_dict = evaluator.score(img_path, caption)
 
+        # Save the cleaned caption (prefix stripped by the evaluator)
+        # to the JSON for clean output
+        clean_caption = evaluator.linguistic_module._strip_prefix(caption)
+
         results.append({
             "index": i,
             "image_path": img_path,
-            "caption": caption,
+            "caption": clean_caption,
             "vtas_score": score_dict["vtas_score"],
-            "visual_recall": score_dict["visual_recall"],
-            "hallucination_rate": score_dict["hallucination_rate"],
+            "precision": score_dict["precision"],
+            "recall": score_dict["recall"],
             "matched": [
                 (t, d, float(s)) for t, d, s in score_dict["matched"]
             ],
