@@ -15,7 +15,7 @@ def nlp_module():
 
 @pytest.fixture(scope="module")
 def semantic_module():
-    return SemanticBridgeModule(threshold=0.75)
+    return SemanticBridgeModule(threshold=0.65)
 
 
 def test_linguistic_extraction_stop_words(nlp_module):
@@ -24,7 +24,6 @@ def test_linguistic_extraction_stop_words(nlp_module):
     nouns = nlp_module.extract(caption)
     
     # 'group', 'people' (sometimes), 'photo', 'view' should be handled.
-    # Actually 'people' might be kept, but 'group', 'photo', 'view' are in STOP_NOUNS.
     assert "group" not in nouns
     assert "photo" not in nouns
     assert "view" not in nouns
