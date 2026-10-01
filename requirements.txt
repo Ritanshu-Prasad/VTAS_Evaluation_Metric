@@ -6,5 +6,6 @@ peft>=0.7.0
 spacy>=3.5.0
 Pillow>=9.0.0
 datasets==2.14.0
+pyarrow==11.0.0
 matplotlib>=3.5.0
 pytest>=7.0.0
