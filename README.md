@@ -64,22 +64,37 @@ VTAS is engineered to fill that gap.
 
 ## What is VTAS?
 
-VTAS (Visual-Truth Alignment Score) is a **Compound AI System** that uses three independent AI models in a pipeline to evaluate image captions:
+VTAS (Visual-Truth Alignment Score) is a **Two-Tier Compound AI System** that evaluates image captions against physical reality:
 
-1. **An Object Detector** (DETR) examines the raw image and extracts what objects are physically present.
-2. **An NLP Parser** (spaCy) examines the generated caption and extracts the nouns the model claims are in the image.
-3. **A Semantic Embedding Model** (MiniLM) bridges the vocabulary gap between the detector and the caption, ensuring that "sofa" and "couch" are recognized as the same concept.
+1. **Tier 1 (Object Grounding):** An Object Detector (DETR) extracts physical objects. An NLP Parser (spaCy) extracts caption nouns. A Semantic Bridge (MiniLM, phrase-based) resolves synonyms.
+2. **Tier 2 (Scene/Context Grounding):** Unmatched nouns (e.g., "bedroom", "outside", or undetected objects) are verified globally against the image using CLIP zero-shot classification.
 
-The final VTAS score combines **Visual Recall** (did the caption mention the important objects?) and a **Hallucination Penalty** (did the caption invent objects that don't exist?) into a single continuous score from 0 to 1.
+The final **VTAS Score (v1.2)** uses the mathematically rigorous **F-beta Score** to balance **Object Precision** (absence of hallucinations) and **Visual Recall** (detecting visible objects) into a single metric [0, 1].
 
 ### VTAS Properties
 | Property | Value |
 |---|---|
 | Reference-Free | ✅ No human captions needed |
-| Detects Hallucinations | ✅ Explicit penalty for invented objects |
-| Handles Synonyms | ✅ Semantic embedding bridging |
-| White-Box / Interpretable | ✅ Pinpoints exactly which word failed |
-| Fully Automated | ✅ No human annotation required |
+| Detects Hallucinations | ✅ Explicit precision penalty for invented objects |
+| Handles Synonyms | ✅ Phrase-based semantic embeddings |
+| Scene Aware | ✅ Tier 2 CLIP validates complex environments |
+| Interpretable | ✅ Pinpoints exactly which word failed |
+
+---
+
+## Pictorial Demonstrations (VTAS in Action)
+
+The following infographics were generated automatically during a VTAS evaluation run. They visually demonstrate how VTAS solves the flaws of legacy metrics.
+
+### Example 1: Perfect Alignment & Synonym Bridging
+Unlike BLEU, VTAS physically draws bounding boxes to verify reality. Even if the wording differs from human annotators, VTAS bridges the vocabulary gap using phrase-based semantic matching.
+![Perfect Alignment](assets/best_example.png)
+
+### Example 2: Scene Context & The "Recall Penalty"
+Traditional metrics like CHAIR crash without human bounding boxes. VTAS operates autonomously.
+* **Tier 2 Rescue:** Notice how words like "fireplace" (which DETR missed) are rescued by the CLIP context module!
+* **Visual Recall Penalty:** This caption scored an F1 of 0.00 not because it hallucinated wildly, but because it *described the scene* instead of listing the physical objects detected by DETR. 
+![Hallucination and Recall Penalty](assets/hallucination_example.png)
 
 ---
 
@@ -95,9 +110,9 @@ result = evaluator.score(
     caption="A man throws a frisbee to his dog in the park"
 )
 
-print(f"VTAS Score: {result['vtas_score']:.4f}")
-print(f"Visual Recall: {result['visual_recall']:.4f}")
-print(f"Hallucination Rate: {result['hallucination_rate']:.4f}")
+print(f"VTAS Score (F1): {result['vtas_score']:.4f}")
+print(f"Object Precision: {result['precision']:.4f}")
+print(f"Visual Recall: {result['recall']:.4f}")
 print(f"Matched Objects: {result['matched']}")
 print(f"Hallucinated Objects: {result['hallucinated']}")
 ```
