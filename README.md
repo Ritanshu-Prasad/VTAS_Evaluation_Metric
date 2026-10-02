@@ -195,5 +195,60 @@ VTAS_Evaluation_Metric/
 
 ---
 
+## Known Limitations & Future Work
+
+VTAS v1 is a strong first step, but we believe in transparent research. The following are **known architectural limitations** that we have identified through extensive evaluation and are actively working to resolve.
+
+### Limitation 1: Semantic Collapse in the Semantic Bridge
+
+**Observed in:** Motorcycle example (Image #78, VTAS = 1.00)
+
+![Semantic Collapse Example](assets/limitation_semantic_collapse.png)
+
+**The Problem:** The caption reads *"the man is riding a motorcycle on the road with people watching."* DETR detected only `{'person', 'motorcycle'}`. The Semantic Bridge matched both `"man" → person (0.70)` and `"people" → person (0.76)`. On the surface, this appears correct — VTAS gave a perfect 1.00. But look closely:
+
+* `"man"` refers to the **rider** (the main subject).
+* `"people"` refers to the **spectators** in the background (secondary subjects).
+
+These are two semantically distinct groups, but both collapsed onto the **single DETR label `"person"`**. VTAS treated them as the same entity. This is a fundamental limitation:
+
+> **VTAS v1 operates on unordered sets of labels.** It has no concept of *which* person is being referenced. If DETR detects one `"person"`, any number of human-related nouns ("man", "woman", "people", "boy") in the caption will all match it, even if they refer to different individuals. This inflates both Precision and Recall.
+
+**Root Cause:** DETR returns *unique category labels*, not instance-level detections. Even if DETR internally draws 5 bounding boxes for 5 people, the VTAS pipeline reduces them to the single label `"person"`.
+
+### Limitation 2: Scene-Level Descriptions Penalized by Object-Level Recall
+
+**Observed in:** Living room example (Image #0, VTAS = 0.00)
+
+![Scene Penalty Example](assets/limitation_scene_penalty.png)
+
+**The Problem:** The caption reads *"the living room has a yellow wall and a black fireplace."* DETR detected 9 objects: `{'clock', 'tv', 'dining table', 'refrigerator', 'person', 'vase', 'potted plant', 'bottle', 'chair'}`. The caption mentioned none of these individual items — it described the **collective environment** instead. As a result:
+
+* **Object Precision = 0.50** — `"fireplace"` was rescued by CLIP (Tier 2), but `"wall"` was marked as a hallucination.
+* **Visual Recall = 0.00** — The caption mentioned 0 out of 9 detected objects.
+* **VTAS (F1) = 0.00** — Because F1 is a harmonic mean, if either P or R is 0, the entire score collapses.
+
+This is arguably the **most important limitation**: a VLM that writes *"the kitchen is clean and ready for us to use"* receives a VTAS of 0.00, even though that caption is a perfectly valid, human-like description of a kitchen. The model correctly identified the scene but chose to describe it holistically rather than itemizing the oven, refrigerator, sink, cups, and bowls that DETR found.
+
+> **VTAS v1 is an object-listing metric, not a scene-understanding metric.** It heavily rewards captions that enumerate discrete objects ("there is a clock, a TV, a chair, and a bottle") and penalizes captions that describe the scene as a whole ("this is a clean, well-lit living room"). This is by design — VTAS measures *grounded object alignment* — but it means that VTAS alone cannot evaluate the full quality of a caption.
+
+**Root Cause:** The F-beta score requires non-zero Recall. When a caption contains zero object-level nouns that overlap with DETR's detections, Recall = 0, and the harmonic mean forces the entire score to 0 regardless of Precision.
+
+---
+
+### Future Work
+
+Based on the limitations above, we propose the following research directions for VTAS v2:
+
+| Direction | Addresses | Approach |
+|---|---|---|
+| **Instance-Aware Grounding** | Limitation 1 | Replace set-based matching with instance-level alignment. Use DETR's bounding box coordinates to distinguish "the rider" from "the spectators". Match each caption noun to a specific detection, preventing multiple nouns from collapsing onto one label. |
+| **Scene-Level Recall** | Limitation 2 | Introduce a secondary recall signal that rewards captions for correctly identifying the *type* of scene (kitchen, bedroom, park) using CLIP or a dedicated scene classifier (e.g., Places365). A caption like "the kitchen is clean" would earn partial Recall credit for correctly classifying the environment. |
+| **Attribute-Level Grounding** | New capability | Extend VTAS beyond nouns to verify adjectives ("red car", "large dog"). Use visual question-answering or attribute classifiers to check if described properties (color, size, material) match the image. |
+| **Spatial Awareness** | New capability | Verify spatial claims ("the dog is *next to* the person", "the cup is *on* the table") against the physical coordinates of DETR bounding boxes. |
+| **Dynamic Threshold Calibration** | Both | Replace the fixed similarity thresholds (MiniLM τ=0.65, CLIP τ=0.22) with dataset-adaptive thresholds calibrated on a held-out validation split, similar to ROC-AUC optimal threshold selection. |
+
+---
+
 ## License
 This project is currently private and under active development.
