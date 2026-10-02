@@ -1,6 +1,12 @@
 # VTAS — Visual-Truth Alignment Score
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
+[![arXiv](https://img.shields.io/badge/arXiv-coming%20soon-b31b1b.svg)]()
+
 **A white-box, reference-free evaluation metric for image captioning that grounds generated text directly against the visual content of the image.**
+
+> *"Does the model see what it says it sees?"* — VTAS answers this question without needing human reference captions.
 
 ---
 
@@ -251,4 +257,19 @@ Based on the limitations above, we propose the following research directions for
 ---
 
 ## License
-This project is currently private and under active development.
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Citation
+
+If you use VTAS in your research, please cite:
+
+```bibtex
+@software{prasad2026vtas,
+  author    = {Prasad, Ritanshu},
+  title     = {VTAS: Visual-Truth Alignment Score},
+  year      = {2026},
+  url       = {https://github.com/Ritanshu-Prasad/VTAS_Evaluation_Metric},
+  license   = {MIT}
+}
+```

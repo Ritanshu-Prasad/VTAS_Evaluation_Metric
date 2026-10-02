@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use VTAS in your research, please cite it as below."
+title: "VTAS: Visual-Truth Alignment Score"
+abstract: >-
+  A reference-free, interpretable evaluation metric for Vision-Language
+  Models that detects object hallucinations using a two-tier grounding
+  pipeline (DETR + CLIP) and an F-beta scoring formulation.
+type: software
+authors:
+  - family-names: Prasad
+    given-names: Ritanshu
+repository-code: "https://github.com/Ritanshu-Prasad/VTAS_Evaluation_Metric"
+license: MIT
+version: "1.2.0"
+date-released: "2026-10-02"
+keywords:
+  - vision-language-models
+  - hallucination-detection
+  - evaluation-metric
+  - image-captioning
+  - object-grounding
+  - DETR
+  - CLIP
