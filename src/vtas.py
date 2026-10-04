@@ -183,15 +183,27 @@ class VTASEvaluator:
         )
 
         # --- Stage 4: CLIP Fallback — Tier 2 ---
-        # Only nouns that failed Tier 1 are sent to CLIP
+        # Prevent CLIP Over-counting Loophole: CLIP cannot count. If a caption says "banana" twice, 
+        # but DETR only found one, the second "banana" shouldn't be rescued by CLIP just because 
+        # a banana exists in the scene.
+        matched_text_nouns = {txt for txt, det, score in alignment["matched"]}
+        
         tier1_hallucinated = alignment["hallucinated"]
-        clip_result = self.clip_module.verify(image, tier1_hallucinated)
+        nouns_for_clip = []
+        strict_hallucinations = []
+        
+        for noun in tier1_hallucinated:
+            if noun in matched_text_nouns:
+                # If we already matched this exact noun, any extra copies without DETR boxes are hallucinations
+                strict_hallucinations.append(noun)
+            else:
+                nouns_for_clip.append(noun)
+
+        clip_result = self.clip_module.verify(image, nouns_for_clip)
 
         # Nouns rescued by CLIP are NOT hallucinations
         clip_grounded = clip_result["grounded"]
-        final_hallucinated = [
-            noun for noun, _ in clip_result["hallucinated"]
-        ]
+        final_hallucinated = [noun for noun, _ in clip_result["hallucinated"]] + strict_hallucinations
 
         # TIER 2 RECALL RESCUE:
         # If a noun like "woman" was rescued by CLIP, it means it's in the image.
@@ -224,9 +236,14 @@ class VTASEvaluator:
 
         # Saliency-weighted Visual Recall (fixes Scene Penalty):
         # Weight each object by its relative bounding box area.
-        # Missing a tiny background object is heavily discounted compared to a salient object.
         total_saliency = sum(obj.get('area', 1.0) for obj in detected_objects)
         missed_saliency = sum(obj.get('area', 1.0) for obj in final_missed)
+        
+        # TIER 2 RECALL BONUS: Reward the VLM for finding objects that DETR completely missed!
+        # If CLIP rescues a noun, it means the VLM saw something DETR missed. We assign it a 
+        # virtual bounding box area (e.g. 10%) so it positively contributes to the Recall score.
+        clip_bonus = 0.10 * len(clip_grounded)
+        total_saliency += clip_bonus
         
         matched_saliency = total_saliency - missed_saliency
         
