@@ -89,7 +89,7 @@ class SemanticBridgeModule:
             detected_objects: List of dicts from DETR.
                 Example: [{'label': 'person', ...}, {'label': 'couch', ...}]
             text_nouns: List of nouns from the generated caption.
-                Example: ['man', 'sofa', 'television']
+                Example: [{'text': 'man', 'is_plural': False}]
 
         Returns:
             A dictionary containing:
@@ -121,9 +121,19 @@ class SemanticBridgeModule:
 
         det_labels = [d['label'] for d in det_list]
         
+        # COCO Ontology Normalization (Fixes LM bias for "woman" vs "person")
+        COCO_ONTOLOGY = {
+            "man": "person", "woman": "person", "boy": "person", "girl": "person",
+            "kid": "person", "child": "person", "baby": "person", "people": "person",
+            "crowd": "person", "guy": "person", "lady": "person", "skier": "person",
+            "player": "person", "worker": "person", "biker": "person", "rider": "person",
+        }
+        
         # Encode as phrases for richer semantic signal
         det_phrases = [self._to_phrase(d) for d in det_labels]
-        txt_phrases = [self._to_phrase(t) for t in txt_labels]
+        # Apply ontology mapping to the text labels BEFORE encoding to bypass MiniLM bias
+        normalized_txt_labels = [COCO_ONTOLOGY.get(t, t) for t in txt_labels]
+        txt_phrases = [self._to_phrase(t) for t in normalized_txt_labels]
 
         det_embeddings = self.model.encode(
             det_phrases, convert_to_tensor=True

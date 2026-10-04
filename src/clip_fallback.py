@@ -44,7 +44,7 @@ class CLIPFallbackModule:
             contextually grounded (not a hallucination).
     """
 
-    def __init__(self, threshold: float = 0.20):
+    def __init__(self, threshold: float = 0.15):
         """
         Initializes the CLIP Fallback Module.
 
@@ -53,10 +53,10 @@ class CLIPFallbackModule:
                 embedding and the text prompt embedding for a noun
                 to be considered contextually grounded. CLIP similarity
                 scores are typically lower than MiniLM text-text scores.
-                Default 0.20 was calibrated to accept scene descriptors
-                and mass nouns (like 'grass' or 'bedroom') while
-                rejecting true hallucinations ("elephant" in a kitchen
-                scores ~0.10-0.15).
+                Default 0.15 was calibrated to accept scene descriptors
+                and mass nouns (like 'grass' or 'bedroom') which often
+                score lower than discrete objects, while still rejecting
+                true hallucinations.
         """
         self.threshold = threshold
 
