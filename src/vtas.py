@@ -193,6 +193,23 @@ class VTASEvaluator:
             noun for noun, _ in clip_result["hallucinated"]
         ]
 
+        # TIER 2 RECALL RESCUE:
+        # If a noun like "woman" was rescued by CLIP, it means it's in the image.
+        # It likely corresponds to the huge "person" DETR box that missed Tier 1 threshold (0.62 < 0.65).
+        # We find these weak synonyms and remove them from the `missed` penalty list!
+        valid_rescued_labels = set()
+        for noun, _ in clip_grounded:
+            if noun in alignment["similarity_matrix"]:
+                # find the best matching DETR label
+                best_match = max(alignment["similarity_matrix"][noun].items(), key=lambda x: x[1], default=(None, 0))
+                if best_match[1] > 0.30:  # Weak synonym threshold
+                    valid_rescued_labels.add(best_match[0])
+
+        final_missed = [
+            m for m in alignment["missed"] 
+            if m['label'] not in valid_rescued_labels
+        ]
+
         # --- Stage 5: Compute Final VTAS Score (F-beta) ---
         num_detected = len(detected_objects)
         num_text_nouns = len(text_nouns)
@@ -209,7 +226,7 @@ class VTASEvaluator:
         # Weight each object by its relative bounding box area.
         # Missing a tiny background object is heavily discounted compared to a salient object.
         total_saliency = sum(obj.get('area', 1.0) for obj in detected_objects)
-        missed_saliency = sum(obj.get('area', 1.0) for obj in alignment["missed"])
+        missed_saliency = sum(obj.get('area', 1.0) for obj in final_missed)
         
         matched_saliency = total_saliency - missed_saliency
         
@@ -238,7 +255,7 @@ class VTASEvaluator:
             "matched": alignment["matched"],
             "clip_grounded": clip_grounded,
             "hallucinated": final_hallucinated,
-            "missed": alignment["missed"],
+            "missed": final_missed,
             "similarity_matrix": alignment["similarity_matrix"],
             "clip_scores": clip_result["scores"],
         }

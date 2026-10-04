@@ -162,11 +162,15 @@ class SemanticBridgeModule:
             if r not in matched_txt_indices:
                 hallucinated.append(txt_list[r])
 
-        # Any detected object not matched is missed
+        # --- Identify detected objects that the caption missed ---
+        # PLURALITY EXEMPTION: If the caption matched at least one instance 
+        # of a class (e.g. matched one 'banana'), we don't penalize it for 
+        # missing the other 4 'banana's. This handles plurals like "apples" gracefully.
+        matched_det_labels = {det['label'] for txt, det, score in matched}
         missed = [
             det_list[c]
             for c in range(len(det_list))
-            if c not in matched_det_indices
+            if c not in matched_det_indices and det_list[c]['label'] not in matched_det_labels
         ]
 
         return {
