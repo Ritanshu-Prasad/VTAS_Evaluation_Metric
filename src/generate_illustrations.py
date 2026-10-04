@@ -76,7 +76,11 @@ def generate_illustration(
     ax_text.text(0.0, y_pos, "1. DETR Detected Objects:",
                  fontsize=11, fontweight='bold')
     y_pos -= spacing * 0.7
-    det_str = textwrap.fill(str(result['detected_objects']), width=55)
+    
+    # Extract labels from dicts for display
+    det_labels = [d['label'] if isinstance(d, dict) else d for d in result['detected_objects']]
+    det_str = textwrap.fill(str(det_labels), width=55)
+    
     ax_text.text(0.03, y_pos, det_str, fontsize=10, color='#1f77b4')
     y_pos -= spacing
 
@@ -92,8 +96,10 @@ def generate_illustration(
     ax_text.text(0.0, y_pos, "3. Tier 1 - MiniLM Matches:",
                  fontsize=11, fontweight='bold')
     y_pos -= spacing * 0.7
+    
+    # Extract label if d is a dict
     matched_str = ", ".join(
-        [f"{t}~{d} ({s:.2f})" for t, d, s in result['matched']]
+        [f"{t}~{d['label'] if isinstance(d, dict) else d} ({s:.2f})" for t, d, s in result['matched']]
     )
     ax_text.text(0.03, y_pos,
                  f"Matched: {matched_str if matched_str else 'None'}",
@@ -120,7 +126,8 @@ def generate_illustration(
     y_pos -= spacing * 0.7
 
     # Missed
-    missed_str = ", ".join(result['missed'])
+    missed_labels = [m['label'] if isinstance(m, dict) else m for m in result['missed']]
+    missed_str = ", ".join(missed_labels)
     ax_text.text(0.03, y_pos,
                  f"Missed by caption: {missed_str if missed_str else 'None'}",
                  fontsize=9, color='orange')

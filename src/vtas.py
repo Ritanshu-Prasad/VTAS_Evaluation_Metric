@@ -286,13 +286,18 @@ def _print_report(result: dict) -> None:
     print(f"  Object Precision:    {result['precision']:.4f}")
     print(f"  Visual Recall:       {result['recall']:.4f}")
     print("-" * 60)
-    print(f"  DETR Detected:       {result['detected_objects']}")
+    det_labels = [d['label'] if isinstance(d, dict) else d for d in result['detected_objects']]
+    print(f"  DETR Detected:       {det_labels}")
     print(f"  Caption Nouns:       {result['text_nouns']}")
     print("-" * 60)
-    print(f"  Tier 1 Matched:      {result['matched']}")
+    
+    matched_strs = [f"{t}~{d['label'] if isinstance(d, dict) else d} ({s:.2f})" for t, d, s in result['matched']]
+    print(f"  Tier 1 Matched:      {matched_strs}")
     print(f"  Tier 2 CLIP Rescued: {result['clip_grounded']}")
     print(f"  Hallucinated:        {result['hallucinated']}")
-    print(f"  Missed:              {result['missed']}")
+    
+    missed_labels = [m['label'] if isinstance(m, dict) else m for m in result['missed']]
+    print(f"  Missed:              {missed_labels}")
     print("-" * 60)
     print("  Tier 1 Similarity Matrix:")
     for noun, scores in result["similarity_matrix"].items():
