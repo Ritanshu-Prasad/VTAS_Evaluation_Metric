@@ -186,13 +186,17 @@ class VTASEvaluator:
         # Prevent CLIP Over-counting Loophole: CLIP cannot count. If a caption says "banana" twice, 
         # but DETR only found one, the second "banana" shouldn't be rescued by CLIP just because 
         # a banana exists in the scene.
-        matched_text_nouns = {txt for txt, det, score in alignment["matched"]}
+        matched_text_nouns = {
+            txt['text'] if isinstance(txt, dict) else txt 
+            for txt, det, score in alignment["matched"]
+        }
         
         tier1_hallucinated = alignment["hallucinated"]
         nouns_for_clip = []
         strict_hallucinations = []
         
-        for noun in tier1_hallucinated:
+        for txt_obj in tier1_hallucinated:
+            noun = txt_obj['text'] if isinstance(txt_obj, dict) else txt_obj
             if noun in matched_text_nouns:
                 # If we already matched this exact noun, any extra copies without DETR boxes are hallucinations
                 strict_hallucinations.append(noun)
@@ -268,8 +272,8 @@ class VTASEvaluator:
             "precision": round(precision, 4),
             "recall": round(recall, 4),
             "detected_objects": detected_objects,
-            "text_nouns": text_nouns,
-            "matched": alignment["matched"],
+            "text_nouns": [t['text'] if isinstance(t, dict) else t for t in text_nouns],
+            "matched": [(t['text'] if isinstance(t, dict) else t, d, s) for t, d, s in alignment["matched"]],
             "clip_grounded": clip_grounded,
             "hallucinated": final_hallucinated,
             "missed": final_missed,

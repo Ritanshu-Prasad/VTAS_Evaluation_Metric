@@ -109,13 +109,20 @@ class SemanticBridgeModule:
         # Deterministic ordering (while preserving instance counts)
         # Sort by area/score if available, or just label
         det_list = sorted(detected_objects, key=lambda x: (x['label'], -x.get('area', 0)))
-        txt_list = sorted(text_nouns)
+        
+        # text_nouns is a list of dicts: [{'text': 'man', 'is_plural': False}]
+        if isinstance(text_nouns[0], dict):
+            txt_list = sorted(text_nouns, key=lambda x: x["text"])
+            txt_labels = [t["text"] for t in txt_list]
+        else:
+            txt_list = sorted(text_nouns)
+            txt_labels = list(txt_list)
 
         det_labels = [d['label'] for d in det_list]
         
         # Encode as phrases for richer semantic signal
         det_phrases = [self._to_phrase(d) for d in det_labels]
-        txt_phrases = [self._to_phrase(t) for t in txt_list]
+        txt_phrases = [self._to_phrase(t) for t in txt_labels]
 
         det_embeddings = self.model.encode(
             det_phrases, convert_to_tensor=True
@@ -129,14 +136,14 @@ class SemanticBridgeModule:
 
         # Build a human-readable similarity matrix for debugging
         similarity_matrix = {}
-        for i, t in enumerate(txt_list):
-            if t not in similarity_matrix:
-                similarity_matrix[t] = {}
+        for i, t_str in enumerate(txt_labels):
+            if t_str not in similarity_matrix:
+                similarity_matrix[t_str] = {}
             # Average similarity across instances of the same class for the report
             # Or just store max
             for j, d in enumerate(det_labels):
                 score = round(sim_matrix[i][j].item(), 4)
-                similarity_matrix[t][d] = max(score, similarity_matrix[t].get(d, 0))
+                similarity_matrix[t_str][d] = max(score, similarity_matrix[t_str].get(d, 0))
 
         # --- Bipartite Matching ---
         # Cost matrix for linear_sum_assignment (wants to minimize cost, so 1 - sim)
@@ -163,14 +170,21 @@ class SemanticBridgeModule:
                 hallucinated.append(txt_list[r])
 
         # --- Identify detected objects that the caption missed ---
-        # PLURALITY EXEMPTION: If the caption matched at least one instance 
-        # of a class (e.g. matched one 'banana'), we don't penalize it for 
-        # missing the other 4 'banana's. This handles plurals like "apples" gracefully.
-        matched_det_labels = {det['label'] for txt, det, score in matched}
+        # QUANTIFIER-AWARE PLURALITY EXEMPTION:
+        # We only exempt remaining instances of a class if the text noun
+        # that matched them was actually PLURAL (e.g. "apples", "a bunch of men").
+        # If the caption said "a man" (singular), we DO penalize for missing the other men!
+        plural_matched_det_labels = set()
+        for txt_obj, det, score in matched:
+            if isinstance(txt_obj, dict) and txt_obj.get("is_plural", False):
+                plural_matched_det_labels.add(det['label'])
+            elif isinstance(txt_obj, str): # fallback
+                plural_matched_det_labels.add(det['label'])
+
         missed = [
             det_list[c]
             for c in range(len(det_list))
-            if c not in matched_det_indices and det_list[c]['label'] not in matched_det_labels
+            if c not in matched_det_indices and det_list[c]['label'] not in plural_matched_det_labels
         ]
 
         return {

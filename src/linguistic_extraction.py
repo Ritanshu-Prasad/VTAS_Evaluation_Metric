@@ -149,7 +149,15 @@ class LinguisticExtractionModule:
                 lemma = token.lemma_
                 # Filter stop nouns and single-character artifacts
                 if lemma not in self.STOP_NOUNS and len(lemma) > 1:
-                    extracted_nouns.append(lemma)
+                    # Determine if the noun was plural or had a number modifier
+                    is_plural = (
+                        token.tag_ in ("NNS", "NNPS") or 
+                        any(child.pos_ == "NUM" for child in token.children)
+                    )
+                    extracted_nouns.append({
+                        "text": lemma,
+                        "is_plural": is_plural
+                    })
 
         return extracted_nouns
 
