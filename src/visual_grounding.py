@@ -43,17 +43,17 @@ class VisualGroundingModule:
         self.model.eval()
 
     @torch.no_grad()
-    def detect(self, image: Image.Image) -> set:
+    def detect(self, image: Image.Image) -> list:
         """
-        Performs object detection on the input image and returns a set
-        of unique object labels that exceed the confidence threshold.
+        Performs object detection on the input image and returns a list
+        of detected objects with their bounding box areas for saliency.
 
         Args:
             image: A PIL Image in RGB mode.
 
         Returns:
-            A set of lowercase object label strings.
-            Example: {'person', 'dog', 'frisbee'}
+            A list of dicts with 'label', 'score', and 'area'.
+            Example: [{'label': 'person', 'score': 0.9, 'area': 0.25}, ...]
         """
         if image.mode != "RGB":
             image = image.convert("RGB")
@@ -67,10 +67,20 @@ class VisualGroundingModule:
             outputs, target_sizes=target_sizes, threshold=self.confidence_threshold
         )[0]
 
-        detected_objects = set()
-        for score, label_id in zip(results["scores"], results["labels"]):
+        image_area = image.width * image.height
+        detected_objects = []
+        
+        for score, label_id, box in zip(results["scores"], results["labels"], results["boxes"]):
             label = self.model.config.id2label[label_id.item()].lower()
-            detected_objects.add(label)
+            xmin, ymin, xmax, ymax = box.tolist()
+            box_area = (xmax - xmin) * (ymax - ymin)
+            relative_area = box_area / image_area
+            
+            detected_objects.append({
+                "label": label,
+                "score": score.item(),
+                "area": relative_area
+            })
 
         return detected_objects
 

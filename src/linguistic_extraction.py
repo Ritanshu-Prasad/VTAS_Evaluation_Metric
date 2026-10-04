@@ -117,9 +117,9 @@ class LinguisticExtractionModule:
 
         return caption
 
-    def extract(self, caption: str) -> set:
+    def extract(self, caption: str) -> list:
         """
-        Parses the input caption and returns a set of unique nouns
+        Parses the input caption and returns a list of nouns
         representing the objects the model claims are in the image.
 
         Processing pipeline:
@@ -134,8 +134,8 @@ class LinguisticExtractionModule:
                 Example: "detailed caption A man throws a frisbee"
 
         Returns:
-            A set of lowercase noun strings, filtered and cleaned.
-            Example: {'man', 'frisbee'}
+            A list of lowercase noun strings, filtered and cleaned.
+            Example: ['man', 'frisbee']
         """
         # Stage 1: Strip prompt artifacts
         cleaned = self._strip_prefix(caption)
@@ -143,13 +143,13 @@ class LinguisticExtractionModule:
         # Stage 2: NLP parsing
         doc = self.nlp(cleaned.lower())
 
-        extracted_nouns = set()
+        extracted_nouns = []
         for token in doc:
             if token.pos_ in ("NOUN", "PROPN"):
                 lemma = token.lemma_
                 # Filter stop nouns and single-character artifacts
                 if lemma not in self.STOP_NOUNS and len(lemma) > 1:
-                    extracted_nouns.add(lemma)
+                    extracted_nouns.append(lemma)
 
         return extracted_nouns
 

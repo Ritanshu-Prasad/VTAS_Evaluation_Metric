@@ -23,6 +23,8 @@ Design Decision (Phrase-Based Encoding):
 
 from sentence_transformers import SentenceTransformer
 from sentence_transformers.util import cos_sim
+import numpy as np
+from scipy.optimize import linear_sum_assignment
 
 
 class SemanticBridgeModule:
@@ -74,29 +76,23 @@ class SemanticBridgeModule:
         return f"a {word}"
 
     def compute_alignment(
-        self, detected_objects: set, text_nouns: set
+        self, detected_objects: list, text_nouns: list
     ) -> dict:
         """
         Computes the semantic alignment between detected visual objects
-        and extracted text nouns using phrase-based embeddings.
-
-        For each text noun, finds the best-matching detected object
-        using cosine similarity. If the best match exceeds the threshold,
-        it is classified as a valid match. Otherwise, it is classified
-        as a hallucination.
-
-        For each detected object, checks if any text noun references it.
-        If not, it is classified as a missed object (impacts Visual Recall).
+        and extracted text nouns using phrase-based embeddings and
+        Bipartite Instance Matching (Hungarian algorithm) to solve
+        Semantic Collapse.
 
         Args:
-            detected_objects: Set of object labels from DETR.
-                Example: {'person', 'couch', 'tv'}
-            text_nouns: Set of nouns from the generated caption.
-                Example: {'man', 'sofa', 'television'}
+            detected_objects: List of dicts from DETR.
+                Example: [{'label': 'person', ...}, {'label': 'couch', ...}]
+            text_nouns: List of nouns from the generated caption.
+                Example: ['man', 'sofa', 'television']
 
         Returns:
             A dictionary containing:
-                - 'matched': List of (text_noun, detected_object, score) tuples
+                - 'matched': List of (text_noun, detected_dict, score) tuples
                 - 'hallucinated': List of text nouns with no visual grounding
                 - 'missed': List of detected objects not mentioned in caption
                 - 'similarity_matrix': Full pairwise similarity scores
@@ -110,12 +106,15 @@ class SemanticBridgeModule:
                 "similarity_matrix": {},
             }
 
-        # Sort for deterministic output ordering
-        det_list = sorted(detected_objects)
+        # Deterministic ordering (while preserving instance counts)
+        # Sort by area/score if available, or just label
+        det_list = sorted(detected_objects, key=lambda x: (x['label'], -x.get('area', 0)))
         txt_list = sorted(text_nouns)
 
+        det_labels = [d['label'] for d in det_list]
+        
         # Encode as phrases for richer semantic signal
-        det_phrases = [self._to_phrase(d) for d in det_list]
+        det_phrases = [self._to_phrase(d) for d in det_labels]
         txt_phrases = [self._to_phrase(t) for t in txt_list]
 
         det_embeddings = self.model.encode(
@@ -131,33 +130,43 @@ class SemanticBridgeModule:
         # Build a human-readable similarity matrix for debugging
         similarity_matrix = {}
         for i, t in enumerate(txt_list):
-            similarity_matrix[t] = {
-                d: round(sim_matrix[i][j].item(), 4)
-                for j, d in enumerate(det_list)
-            }
+            if t not in similarity_matrix:
+                similarity_matrix[t] = {}
+            # Average similarity across instances of the same class for the report
+            # Or just store max
+            for j, d in enumerate(det_labels):
+                score = round(sim_matrix[i][j].item(), 4)
+                similarity_matrix[t][d] = max(score, similarity_matrix[t].get(d, 0))
 
-        # --- Classify text nouns as matched or hallucinated ---
+        # --- Bipartite Matching ---
+        # Cost matrix for linear_sum_assignment (wants to minimize cost, so 1 - sim)
+        cost_matrix = 1.0 - sim_matrix.cpu().numpy()
+        row_ind, col_ind = linear_sum_assignment(cost_matrix)
+
         matched = []
         hallucinated = []
         matched_det_indices = set()
+        matched_txt_indices = set()
 
-        for i, t in enumerate(txt_list):
-            best_score = sim_matrix[i].max().item()
-            best_idx = sim_matrix[i].argmax().item()
-
-            if best_score >= self.threshold:
+        for r, c in zip(row_ind, col_ind):
+            score = sim_matrix[r][c].item()
+            if score >= self.threshold:
                 matched.append(
-                    (t, det_list[best_idx], round(best_score, 4))
+                    (txt_list[r], det_list[c], round(score, 4))
                 )
-                matched_det_indices.add(best_idx)
-            else:
-                hallucinated.append(t)
+                matched_det_indices.add(c)
+                matched_txt_indices.add(r)
 
-        # --- Identify detected objects that the caption missed ---
+        # Any text noun not matched is hallucinated
+        for r in range(len(txt_list)):
+            if r not in matched_txt_indices:
+                hallucinated.append(txt_list[r])
+
+        # Any detected object not matched is missed
         missed = [
-            det_list[j]
-            for j in range(len(det_list))
-            if j not in matched_det_indices
+            det_list[c]
+            for c in range(len(det_list))
+            if c not in matched_det_indices
         ]
 
         return {

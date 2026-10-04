@@ -51,11 +51,11 @@ def parse_args():
         help="Number of COCO validation images to evaluate."
     )
     parser.add_argument(
-        "--num_best", type=int, default=5,
+        "--num_best", type=int, default=50,
         help="Number of best-scoring infographics to generate."
     )
     parser.add_argument(
-        "--num_worst", type=int, default=5,
+        "--num_worst", type=int, default=50,
         help="Number of worst-scoring infographics to generate."
     )
     return parser.parse_args()
@@ -163,8 +163,12 @@ def run_evaluation(args):
         # to the JSON for clean output
         clean_caption = evaluator.linguistic_module._strip_prefix(caption)
 
+        # Try to extract the true COCO image_id if available, fallback to index
+        image_id = item.get("image_id", item.get("id", i))
+
         results.append({
             "index": i,
+            "image_id": image_id,
             "image_path": img_path,
             "caption": clean_caption,
             "vtas_score": score_dict["vtas_score"],

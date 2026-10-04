@@ -196,7 +196,6 @@ class VTASEvaluator:
         # --- Stage 5: Compute Final VTAS Score (F-beta) ---
         num_detected = len(detected_objects)
         num_text_nouns = len(text_nouns)
-        num_matched_det = num_detected - len(alignment["missed"])
         num_hallucinated = len(final_hallucinated)
 
         # Object Precision: fraction of caption nouns that are grounded.
@@ -206,11 +205,17 @@ class VTASEvaluator:
             if num_text_nouns > 0 else 1.0
         )
 
-        # Visual Recall: fraction of detected objects mentioned.
-        # When no objects were detected, recall is 1.0 (nothing to miss).
+        # Saliency-weighted Visual Recall (fixes Scene Penalty):
+        # Weight each object by its relative bounding box area.
+        # Missing a tiny background object is heavily discounted compared to a salient object.
+        total_saliency = sum(obj.get('area', 1.0) for obj in detected_objects)
+        missed_saliency = sum(obj.get('area', 1.0) for obj in alignment["missed"])
+        
+        matched_saliency = total_saliency - missed_saliency
+        
         recall = (
-            num_matched_det / num_detected
-            if num_detected > 0 else 1.0
+            matched_saliency / total_saliency
+            if total_saliency > 0 else 1.0
         )
 
         # F-beta Score: harmonic mean of Precision and Recall.
