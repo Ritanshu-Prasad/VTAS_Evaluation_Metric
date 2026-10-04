@@ -42,16 +42,17 @@ class SemanticBridgeModule:
         threshold: The cosine similarity cutoff for a valid match.
     """
 
-    def __init__(self, threshold: float = 0.65):
+    def __init__(self, threshold: float = 0.60):
         """
         Initializes the Semantic Bridge Module.
 
         Args:
             threshold: Minimum cosine similarity for two words to be
-                considered semantically equivalent. Default 0.65 was
+                considered semantically equivalent. Default 0.60 was
                 chosen after testing phrase-based encoding, which
                 shifts the similarity distribution upward. Key pairs:
                     "a man"   <-> "a person"     : ~0.72
+                    "a woman" <-> "a person"     : ~0.62
                     "a sofa"  <-> "a couch"      : ~0.85
                     "a cat"   <-> "a dog"         : ~0.48  (rejected)
                     "a car"   <-> "a truck"       : ~0.58  (rejected)

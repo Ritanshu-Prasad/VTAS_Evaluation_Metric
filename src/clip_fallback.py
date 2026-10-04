@@ -44,7 +44,7 @@ class CLIPFallbackModule:
             contextually grounded (not a hallucination).
     """
 
-    def __init__(self, threshold: float = 0.22):
+    def __init__(self, threshold: float = 0.20):
         """
         Initializes the CLIP Fallback Module.
 
@@ -53,8 +53,8 @@ class CLIPFallbackModule:
                 embedding and the text prompt embedding for a noun
                 to be considered contextually grounded. CLIP similarity
                 scores are typically lower than MiniLM text-text scores.
-                Default 0.22 was calibrated to accept scene descriptors
-                ("bedroom" in a bedroom image scores ~0.25-0.30) while
+                Default 0.20 was calibrated to accept scene descriptors
+                and mass nouns (like 'grass' or 'bedroom') while
                 rejecting true hallucinations ("elephant" in a kitchen
                 scores ~0.10-0.15).
         """
@@ -71,7 +71,7 @@ class CLIPFallbackModule:
         Checks whether each noun is contextually present in the image
         using CLIP's zero-shot classification capability.
 
-        For each noun, constructs a prompt "a photo of a {noun}" and
+        For each noun, constructs a prompt "a photo of {noun}" and
         computes its cosine similarity with the image embedding. If the
         similarity exceeds the threshold, the noun is considered
         contextually grounded.
@@ -96,7 +96,7 @@ class CLIPFallbackModule:
             image = image.convert("RGB")
 
         # Construct natural language prompts for each noun
-        prompts = [f"a photo of a {noun}" for noun in nouns]
+        prompts = [f"a photo of {noun}" for noun in nouns]
 
         # Encode image and text into CLIP's shared embedding space
         inputs = self.processor(
