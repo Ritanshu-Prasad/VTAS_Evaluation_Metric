@@ -178,6 +178,31 @@ def main():
         print("[Baselines] Not enough valid data points for correlation/plotting.")
         pearson_corr = spearman_corr = 0
         
+    # --- Compute CHAIR (Caption Hallucination Assessment with Image Relevance) ---
+    # CHAIRi: Total hallucinated objects / Total extracted objects
+    # CHAIRs: Fraction of captions that contain at least one hallucination
+    total_hallucinated_objects = 0
+    total_extracted_objects = 0
+    hallucinated_sentences = 0
+    
+    for item in results:
+        hallucinated = item.get("hallucinated", [])
+        text_nouns = item.get("text_nouns", [])
+        
+        total_hallucinated_objects += len(hallucinated)
+        total_extracted_objects += len(text_nouns)
+        
+        if len(hallucinated) > 0:
+            hallucinated_sentences += 1
+            
+    chair_i = total_hallucinated_objects / total_extracted_objects if total_extracted_objects > 0 else 0.0
+    chair_s = hallucinated_sentences / len(results) if len(results) > 0 else 0.0
+    
+    print(f"\n[Baselines] --- CHAIR Hallucination Metrics ---")
+    print(f"[Baselines] CHAIRi (Instance-level): {chair_i:.4f}  (Lower is better)")
+    print(f"[Baselines] CHAIRs (Sentence-level): {chair_s:.4f}  (Lower is better)")
+    print(f"[Baselines] -----------------------------------\n")
+
     # Run pycocoevalcap
     try:
         metrics = run_pycocoevalcap(args.vtas_results, args.coco_annotations, args.output_dir)
@@ -193,6 +218,10 @@ def main():
             "correlation": {
                 "pearson": pearson_corr,
                 "spearman": spearman_corr
+            },
+            "chair": {
+                "CHAIRi": chair_i,
+                "CHAIRs": chair_s
             },
             "nlg_metrics": metrics
         }, f, indent=4)
