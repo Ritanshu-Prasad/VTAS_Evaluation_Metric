@@ -1,5 +1,6 @@
 # VTAS — Visual-Truth Alignment Score
 
+[![PyPI version](https://badge.fury.io/py/vtas-metric.svg)](https://badge.fury.io/py/vtas-metric)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://www.python.org/)
 
