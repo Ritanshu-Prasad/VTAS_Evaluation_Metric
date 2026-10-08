@@ -23,8 +23,17 @@ pip install vtas-metric
 from vtas import VTASEvaluator
 
 evaluator = VTASEvaluator()
-score = evaluator.score("path/to/image.jpg", "A dog playing in the grass")
-print(f"VTAS Score: {score['vtas_score']}")
+
+result = evaluator.score(
+    image_path="path/to/image.jpg",
+    caption="A man throws a frisbee to his dog in the park"
+)
+
+print(f"VTAS Score (F1): {result['vtas_score']:.4f}")
+print(f"Object Precision: {result['precision']:.4f}")
+print(f"Visual Recall: {result['recall']:.4f}")
+print(f"Matched Objects: {result['matched']}")
+print(f"Hallucinated Objects: {result['hallucinated']}")
 ```
 
 ---
