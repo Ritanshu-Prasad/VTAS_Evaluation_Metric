@@ -1,6 +1,10 @@
+﻿
 # Byte-compiled / optimized
 __pycache__/
 *.py[cod]
+build/
+dist/
+*.egg-info/
 
 # Model weights and caches
 *.safetensors
@@ -25,3 +29,5 @@ Thumbs.db
 *.log
 outputs/
 results/
+.pypirc
+
