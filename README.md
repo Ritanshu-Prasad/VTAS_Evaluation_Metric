@@ -9,6 +9,25 @@
 
 ---
 
+## Installation 🚀
+
+VTAS is now officially available on PyPI! You can install it instantly via pip:
+
+```bash
+pip install vtas-metric
+```
+
+**Quickstart Usage:**
+```python
+from vtas import VTASEvaluator
+
+evaluator = VTASEvaluator()
+score = evaluator.score("path/to/image.jpg", "A dog playing in the grass")
+print(f"VTAS Score: {score['vtas_score']}")
+```
+
+---
+
 ## Why Does This Metric Exist?
 
 Image captioning models generate natural language descriptions of images. To measure how "good" a generated caption is, the research community relies on a set of standard metrics. However, every single one of them shares a critical architectural flaw: **they are blind to the image.**
