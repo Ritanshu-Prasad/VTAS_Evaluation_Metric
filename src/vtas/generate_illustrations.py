@@ -19,7 +19,7 @@ from PIL import Image
 import os
 import textwrap
 
-from vtas import VTASEvaluator
+from .vtas import VTASEvaluator
 
 
 def generate_illustration(

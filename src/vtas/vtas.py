@@ -59,10 +59,10 @@ Mathematical Formulation (v1.2 — F-beta Score):
 
 from PIL import Image
 
-from visual_grounding import VisualGroundingModule
-from linguistic_extraction import LinguisticExtractionModule
-from semantic_bridge import SemanticBridgeModule
-from clip_fallback import CLIPFallbackModule
+from .visual_grounding import VisualGroundingModule
+from .linguistic_extraction import LinguisticExtractionModule
+from .semantic_bridge import SemanticBridgeModule
+from .clip_fallback import CLIPFallbackModule
 
 
 class VTASEvaluator:

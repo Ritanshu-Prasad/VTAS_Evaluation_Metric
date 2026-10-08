@@ -29,7 +29,7 @@ from peft import PeftModel
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from vtas import VTASEvaluator
-from generate_illustrations import generate_illustration
+from vtas.generate_illustrations import generate_illustration
 
 
 def parse_args():
