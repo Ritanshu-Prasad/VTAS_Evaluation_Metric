@@ -31,3 +31,6 @@ outputs/
 results/
 .pypirc
 
+
+# Scratchpad for local testing
+scratch/
