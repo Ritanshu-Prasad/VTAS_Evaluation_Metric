@@ -294,7 +294,7 @@ This repository is organized into distinct modules to separate the core library 
 un_evaluation.py, 
 un_baselines.py) used to generate the results and ablation studies for the paper.
 - **examples/**: Simple tutorials (atch_test_vtas.py) showing how to use the metric on custom image folders.
-- **	ests/**: Unit tests for verifying metric math and extraction logic.
+- **tests/**: Unit tests for verifying metric math and extraction logic.
 
 ---
 
