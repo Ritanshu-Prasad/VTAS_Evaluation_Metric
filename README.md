@@ -36,6 +36,18 @@ print(f"Matched Objects: {result['matched']}")
 print(f"Hallucinated Objects: {result['hallucinated']}")
 ```
 
+### Advanced Configuration (Hyperparameters)
+You can heavily customize how strict VTAS is by tuning its hyperparameters during initialization:
+
+```python
+evaluator = VTASEvaluator(
+    detection_confidence=0.7,  # How confident DETR must be to register a visual object
+    similarity_threshold=0.60, # The MiniLM Cosine distance required to match text to boxes
+    clip_threshold=0.15,       # The CLIP Cosine distance required to 'rescue' a mass noun
+    beta=1.0                   # F-beta weighting (beta < 1 prioritizes Precision/Hallucinations)
+)
+```
+
 ---
 
 ## Why Does This Metric Exist?
@@ -44,7 +56,14 @@ Image captioning models generate natural language descriptions of images. To mea
 
 They compare the **generated text** against **human-written reference text**, but never verify whether the generated text actually describes what is physically present in the image. This creates three categories of failure:
 
-### The Problem with Existing Metrics
+### The CLIPScore Hallucination Problem
+Modern reference-free metrics like **CLIPScore** act as a visual "bag of words." If a model hallucinates an object, CLIPScore simply averages it out and ignores the error, giving falsely high scores to terrible captions. 
+
+As shown in our 1,000-image COCO validation study below, VTAS actively punishes the "Hallucination Outliers" (Red Dots) that CLIPScore blindly approves:
+
+<img src="assets/vtas_vs_clipscore.png" alt="VTAS vs CLIPScore Scatter Plot" width="600"/>
+
+### The Problem with Legacy Metrics
 
 #### 1. BLEU (Bilingual Evaluation Understudy)
 BLEU measures n-gram precision — it counts how many word chunks in the generated caption appear in the human reference.
