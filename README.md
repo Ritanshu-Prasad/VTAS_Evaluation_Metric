@@ -289,10 +289,12 @@ Based on the limitations above, we propose the following research directions for
 
 This repository is organized into distinct modules to separate the core library from research experiments:
 
-- **\src/vtas/\**: The core, PyPI-installable Python package containing the metric algorithms (Semantic Bridge, CLIP Fallback, Saliency Scoring).
-- **\experiments/\**: The Kaggle runner scripts (un_evaluation.py\, un_baselines.py\) used to generate the results and ablation studies for the paper.
-- **\examples/\**: Simple tutorials (\atch_test_vtas.py\) showing how to use the metric on custom image folders.
-- **\	ests/\**: Unit tests for verifying metric math and extraction logic.
+- **src/vtas/**: The core, PyPI-installable Python package containing the metric algorithms (Semantic Bridge, CLIP Fallback, Saliency Scoring).
+- **experiments/**: The Kaggle runner scripts (
+un_evaluation.py, 
+un_baselines.py) used to generate the results and ablation studies for the paper.
+- **examples/**: Simple tutorials (atch_test_vtas.py) showing how to use the metric on custom image folders.
+- **	ests/**: Unit tests for verifying metric math and extraction logic.
 
 ---
 
