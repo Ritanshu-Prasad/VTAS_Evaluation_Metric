@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vtas-metric"
+dynamic = ["version"]
+description = "VTAS: Visual-Truth Alignment Score for evaluating image captions"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Ritanshu Prasad" }]  # TODO: add real email once confirmed
+keywords = ["image-captioning", "hallucination-detection", "evaluation-metric", "vision-language-models"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "torch>=2.0.0",
+    "transformers>=4.30.0",
+    "sentence-transformers>=2.2.0",
+    "spacy>=3.5.0",
+    "scipy>=1.9.0",
+    "numpy",
+    "Pillow>=9.0.0",
+]
+
+[project.optional-dependencies]
+viz = ["matplotlib>=3.5.0"]
+dev = ["pytest>=7.0.0"]
+# Only needed to reproduce the paper experiments in experiments/.
+experiments = ["peft>=0.7.0", "datasets>=2.16.0", "torchao>=0.16.0", "matplotlib>=3.5.0"]
+
+[project.urls]
+Homepage = "https://github.com/Ritanshu-Prasad/VTAS_Evaluation_Metric"
+Issues = "https://github.com/Ritanshu-Prasad/VTAS_Evaluation_Metric/issues"
+
+[project.scripts]
+vtas = "vtas.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = { attr = "vtas._version.__version__" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests", "src"]
+addopts = "-m 'not integration'"
+markers = ["integration: loads real spaCy/MiniLM models (needs network on first run)"]
