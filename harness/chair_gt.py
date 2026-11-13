@@ -25,8 +25,8 @@ Known quirks of the reference that are deliberately reproduced, not fixed:
 The only deviation: the reference calls ``nltk.word_tokenize``, which needs the Punkt
 model download. Here sentences are split with a regular expression and each sentence is
 tokenised with the same ``NLTKWordTokenizer`` that ``word_tokenize`` uses, so no data
-download is needed. ``scripts`` in the harness check that this gives the same COCO
-object mentions as ``nltk.word_tokenize`` on the evaluated captions.
+download is needed. ``python -m harness.eval_chair ... --check-tokenizer`` compares it
+with ``nltk.word_tokenize``: 0 differences on 6,003 dev texts (BLIP + references).
 """
 
 from __future__ import annotations

@@ -182,8 +182,9 @@ REGISTRY: dict[str, Dataset] = {d.key: d for d in [
         "nocaps", "nocaps validation (Agrawal et al., 2019)", "https://nocaps.org/",
         False,
         "official S3 object (nocaps.s3.amazonaws.com/nocaps_val_4500_captions.json) now "
-        "returns 403; byte-identical-size copy from the Hugging Face repo "
-        f"OpenGVLab/MM-Interleaved at commit {NOCAPS_MIRROR_REV[:7]}, checksum-pinned",
+        "returns 403; copy from the Hugging Face repo OpenGVLab/MM-Interleaved at commit "
+        f"{NOCAPS_MIRROR_REV[:7]}, checksum-pinned (cannot be compared with the original; "
+        "it parses to the published 4,500 images / 45,000 captions)",
         "Open Images V4 validation images by open_images_id (CVDF public bucket)",
         (RemoteFile("nocaps_val_4500_captions.json",
                     "https://huggingface.co/OpenGVLab/MM-Interleaved/resolve/"
