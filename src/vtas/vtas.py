@@ -17,7 +17,7 @@ Usage:
     )
     print(result['vtas_score'])
 
-Mathematical Formulation (v1.2 — F-beta Score):
+Mathematical Formulation (F-beta Score):
     Given:
         V = set of objects detected by DETR in the image
         T = set of nouns extracted from the generated caption
@@ -57,12 +57,11 @@ Mathematical Formulation (v1.2 — F-beta Score):
     Range: [0, 1] where 1.0 = perfect alignment, 0.0 = complete failure.
 """
 
+import warnings
+
 from PIL import Image
 
-from .visual_grounding import VisualGroundingModule
-from .linguistic_extraction import LinguisticExtractionModule
-from .semantic_bridge import SemanticBridgeModule
-from .clip_fallback import CLIPFallbackModule
+from ._version import __version__
 
 
 class VTASEvaluator:
@@ -116,6 +115,20 @@ class VTASEvaluator:
             DETR (~160MB), MiniLM (~80MB), CLIP (~600MB), spaCy (~12MB).
             Subsequent runs use the Hugging Face cache.
         """
+        warnings.warn(
+            "VTAS 1.x is in maintenance mode: 1.3.x receives bug fixes only. "
+            "VTAS 2.0 (new claim parser, calibrated verifiers, typed results) "
+            "is coming; 1.x scores will not be comparable with 2.0 scores.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        # Heavy imports are deferred so that importing `vtas` is cheap and
+        # the scoring math can be unit-tested without model dependencies.
+        from .visual_grounding import VisualGroundingModule
+        from .linguistic_extraction import LinguisticExtractionModule
+        from .semantic_bridge import SemanticBridgeModule
+        from .clip_fallback import CLIPFallbackModule
+
         self.beta = beta
         print("[VTAS] Initializing Visual Grounding Module (DETR)...")
         self.visual_module = VisualGroundingModule(
@@ -158,8 +171,9 @@ class VTASEvaluator:
         Returns:
             A dictionary containing:
                 - 'vtas_score': The final VTAS score (float, 0 to 1).
-                - 'visual_recall': Fraction of detected objects mentioned.
-                - 'hallucination_rate': Fraction of text nouns not grounded.
+                - 'precision': 1 - |hallucinated| / |caption nouns|.
+                - 'recall': Saliency-weighted fraction of detected objects
+                  mentioned (see the module docstring and docs/architecture.md).
                 - 'detected_objects': Set of objects found by DETR.
                 - 'text_nouns': Set of nouns extracted from the caption.
                 - 'matched': List of (noun, object, score) from Tier 1.
@@ -318,7 +332,7 @@ class VTASEvaluator:
 def _print_report(result: dict) -> None:
     """Formats and prints a human-readable VTAS diagnostic report."""
     print("=" * 60)
-    print("          VTAS v1.2 DIAGNOSTIC REPORT")
+    print(f"          VTAS v{__version__} DIAGNOSTIC REPORT")
     print("=" * 60)
     print(f"  VTAS Score (F-beta): {result['vtas_score']:.4f}")
     print(f"  Object Precision:    {result['precision']:.4f}")
@@ -351,7 +365,7 @@ if __name__ == "__main__":
     import sys
 
     print("=" * 60)
-    print("  VTAS v1.1 — Interactive Evaluation")
+    print(f"  VTAS v{__version__} — Interactive Evaluation")
     print("=" * 60)
 
     if len(sys.argv) < 3:
