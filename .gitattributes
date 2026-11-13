@@ -1,0 +1,4 @@
+# Checksummed data files must be byte-identical on every OS.
+harness/resources/** -text
+harness/splits/** -text
+tests/fixtures/** -text
