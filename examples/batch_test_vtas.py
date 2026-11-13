@@ -14,7 +14,7 @@ from PIL import Image
 from transformers import BlipProcessor, BlipForConditionalGeneration
 
 from vtas import VTASEvaluator
-from generate_illustrations import generate_illustration
+from vtas.generate_illustrations import generate_illustration  # needs: pip install "vtas-metric[viz]"
 
 def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -63,10 +63,12 @@ def main():
             "image_path": img_path,
             "caption": caption,
             "vtas_score": vtas_result["vtas_score"],
-            "visual_recall": vtas_result["visual_recall"],
-            "hallucination_rate": vtas_result["hallucination_rate"]
+            "precision": vtas_result["precision"],
+            "recall": vtas_result["recall"],
+            "hallucinated": vtas_result["hallucinated"],
         })
-        print(f"[{img_file}] Score: {vtas_result['vtas_score']:.2f} | Caption: {caption}")
+        print(f"[{img_file}] Score: {vtas_result['vtas_score']:.2f} "
+              f"(P={vtas_result['precision']:.2f}, R={vtas_result['recall']:.2f}) | Caption: {caption}")
         
     # --- Analysis & Illustration Generation ---
     print("\nSorting results and generating infographics for extreme cases...")

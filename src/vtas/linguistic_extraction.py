@@ -9,12 +9,14 @@ Part-of-Speech (POS) tagging.
 Design Decision:
     We extract only nouns (POS tags: NOUN, PROPN) because VTAS v1
     evaluates object-level alignment. Adjectives, verbs, and spatial
-    prepositions are out-of-scope for v1 and are planned for v1.1
-    (Attribute-Level Grounding and Spatial Awareness).
+    prepositions are out-of-scope for v1 and are planned for VTAS 2.0
+    (attribute, relation and count claims).
 """
 
 import re
 import spacy
+
+from ._spacy_model import SpacyModelMissingError, missing_message
 
 
 class LinguisticExtractionModule:
@@ -87,7 +89,10 @@ class LinguisticExtractionModule:
                 For production, 'en_core_web_md' or 'en_core_web_lg'
                 offer better accuracy at higher memory cost.
         """
-        self.nlp = spacy.load(model_name)
+        try:
+            self.nlp = spacy.load(model_name)
+        except OSError as exc:
+            raise SpacyModelMissingError(missing_message(model_name)) from exc
 
     def _strip_prefix(self, caption: str) -> str:
         """

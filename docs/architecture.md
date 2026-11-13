@@ -1,190 +1,105 @@
-# 👁️ VTAS: Visual-Truth Alignment Score
-**A Novel Multi-Model Evaluation Framework for Image Captioning**
+# VTAS 1.3 Architecture
 
-## The Core Problem
-Traditional n-gram metrics (BLEU, METEOR, CIDEr) are "blind". They compare generated text to human reference text without ever looking at the actual image. 
-* This leads to heavy penalties for valid synonyms.
-* It fails to effectively penalize visual hallucinations if the ground truth reference is flawed or incomplete.
+**VTAS (Visual-Truth Alignment Score)** is a reference-free metric for image captions. It checks the nouns a caption claims against what an object detector and CLIP find in the image, and reports precision (no invented objects), recall (visible objects mentioned) and their F-beta combination.
 
-## The Solution
-A custom evaluation metric engineered to directly verify the generated text against the physical pixels of the image, rather than relying solely on human text annotations.
+> **Status.** VTAS 1.3.x is in maintenance mode (bug fixes only). VTAS 2.0 is coming with a new claim parser, calibrated verifiers and a typed result object; `VTASEvaluator` will then become a thin wrapper that emits a `DeprecationWarning`, and **1.x scores will not be comparable with 2.0 scores**. Since 1.3.1, constructing `VTASEvaluator` already emits a `DeprecationWarning` to that effect. See [ROADMAP_V2.md](ROADMAP_V2.md).
+
+All results quoted for VTAS so far are **preliminary**: they have not yet been validated against ground-truth hallucination labels (see the roadmap, Section 6).
 
 ---
 
-## 🏗️ Architecture & Pipeline (Compound AI System)
+## Pipeline
 
-### 1. Visual Grounding Module (The "Eyes")
-- **Technology:** Lightweight, pre-trained object detection pipeline (e.g., `facebook/detr-resnet-50` via Hugging Face `transformers`).
-- **Input:** Raw Image.
-- **Output:** Set of detected physical objects with confidence scores (e.g., `Set(V) = {'person', 'dog', 'frisbee'}`).
+```
+image ──► [1] DETR ───────────────► detections D = [{label, area, ...}]
+caption ─► [2] spaCy ─────────────► claims T = [{text, is_plural}]
+                       │
+        D, T ─► [3] MiniLM + Hungarian matching ──► matched / hallucinated(T1) / missed
+                       │
+ hallucinated(T1) ─► [4] CLIP (whole image) ──► rescued (grounded) / hallucinated
+                       │
+              [5] scoring: precision, saliency-weighted recall, F-beta
+```
 
-### 2. Linguistic Extraction Module (The "Brain")
-- **Technology:** Natural Language Toolkit (`nltk`) or `spaCy`.
-- **Action:** Parse the Vision-Language Model's generated caption using Part-of-Speech (POS) tagging to extract primary nouns and objects.
-- **Input:** Generated string (e.g., *"A man throws a frisbee to his cat"*).
-- **Output:** Set of textual objects (e.g., `Set(T) = {'man', 'frisbee', 'cat'}`).
+| Stage | Module | Model | Role |
+|---|---|---|---|
+| 1 | `visual_grounding.py` | `facebook/detr-resnet-50` | Detect COCO objects above `detection_confidence` (0.7); each detection carries a relative bounding-box `area`. |
+| 2 | `linguistic_extraction.py` | spaCy `en_core_web_sm` | Strip prompt prefixes (e.g. "detailed caption"), take NOUN/PROPN tokens, lemmatise, drop generic nouns (`STOP_NOUNS`), flag plurals (`NNS`/`NNPS` or a numeral child). |
+| 3 | `semantic_bridge.py` | `all-MiniLM-L6-v2` | **Tier 1.** Embed `"a <noun>"` / `"a <label>"` phrases; a fixed ontology first maps person words (man, woman, kid, ...) to `person`; one-to-one assignment by the Hungarian algorithm; a pair counts only if cosine similarity ≥ τ₁. |
+| 4 | `clip_fallback.py` | `openai/clip-vit-base-patch32` | **Tier 2.** Unmatched nouns are scored against the full image; similarity ≥ τ₂ rescues the noun. |
+| 5 | `vtas.py` (`score`) | none | Arithmetic below. |
 
-### 3. Semantic Bridging Module (The "Translator")
-- **Technology:** Sentence embeddings via `all-MiniLM-L6-v2`.
-- **Action:** For every pair `(t, v)` where `t ∈ Set(T)` and `v ∈ Set(V)`, compute `cosine_similarity(embed(t), embed(v))`.
-- **Purpose:** Resolves vocabulary mismatch so that "sofa" and "couch" are recognized as the same concept.
-
-### 4. Scoring Engine (The Math)
-See **Mathematical Formulation** section below for the exact equations.
-
----
-
-## 📐 Mathematical Formulation
-
-Given:
-- $V = \{v_1, v_2, ..., v_n\}$ — Set of objects detected by DETR in the image
-- $T = \{t_1, t_2, ..., t_m\}$ — Set of nouns extracted from the generated caption
-- $\text{sim}(t_i, v_j) = \text{cosine}(\text{embed}(t_i), \text{embed}(v_j))$ — Semantic similarity between a text noun and a detected object
-- $\tau$ — Similarity threshold (default: 0.75)
-
-### Step 1: Semantic Matching
-A text noun $t_i$ is considered a **valid match** if there exists at least one detected object $v_j$ such that:
-
-$$\text{matched}(t_i) = \begin{cases} 1 & \text{if } \max_{v_j \in V} \text{sim}(t_i, v_j) \geq \tau \\ 0 & \text{otherwise (hallucination)} \end{cases}$$
-
-### Step 2: Visual Recall (VR)
-Measures how many of the detected objects were mentioned in the caption:
-
-$$VR = \frac{|\{v_j \in V : \max_{t_i \in T} \text{sim}(t_i, v_j) \geq \tau\}|}{|V|}$$
-
-### Step 3: Hallucination Rate (HR)
-Measures how many of the text nouns have no grounding in the image:
-
-$$HR = \frac{|\{t_i \in T : \text{matched}(t_i) = 0\}|}{|T|}$$
-
-### Step 4: Final VTAS Score
-
-$$\text{VTAS} = VR \times (1 - HR)$$
-
-- **Score = 1.0:** The caption mentioned every detected object and hallucinated nothing. Perfect alignment.
-- **Score = 0.0:** The caption either missed everything or hallucinated everything.
-- **Range:** Continuous value in $[0, 1]$.
+Defaults: τ₁ = 0.65 (`similarity_threshold`), τ₂ = 0.22 (`clip_threshold`), β = 1.0.
 
 ---
 
-## 🔍 Worked Examples
+## Mathematics (as implemented in `VTASEvaluator.score`)
 
-### Example 1: The Perfect Caption
-**Image:** A park scene with a person throwing a frisbee to a dog.
+**Notation.** `D` is the list of detections, each with an area `a(d)` (1.0 if absent). `T` is the list of caption claims (a noun repeated twice is two claims). `|·|` counts list entries.
 
-| Module | Output |
-|--------|--------|
-| **DETR** | `Set(V) = {'person', 'dog', 'frisbee'}` |
-| **NLP** | Caption: *"A man throws a frisbee to his dog"* → `Set(T) = {'man', 'frisbee', 'dog'}` |
-| **Bridging** | `sim('man', 'person') = 0.82 ✅`, `sim('frisbee', 'frisbee') = 1.0 ✅`, `sim('dog', 'dog') = 1.0 ✅` |
-| **VR** | 3/3 = **1.0** |
-| **HR** | 0/3 = **0.0** |
-| **VTAS** | 1.0 × (1 - 0.0) = **1.0** ✅ Perfect |
+### Tier 1: one-to-one matching
 
-### Example 2: The Synonym Edge Case (Where BLEU Fails, VTAS Succeeds)
-**Image:** A living room with a person sitting on a couch watching TV.
+Cosine similarities between claims and detections form a matrix; the Hungarian algorithm picks the assignment with maximum total similarity. A pair `(t, d)` is **matched** if `sim(t, d) ≥ τ₁`. Each detection can be used by at most one claim, so two nouns cannot both be grounded by a single detected object. Claims left unmatched are *Tier-1 unmatched*.
 
-| Module | Output |
-|--------|--------|
-| **DETR** | `Set(V) = {'person', 'couch', 'tv'}` |
-| **NLP** | Caption: *"A man relaxes on a sofa watching television"* → `Set(T) = {'man', 'sofa', 'television'}` |
-| **Bridging** | `sim('man', 'person') = 0.82 ✅`, `sim('sofa', 'couch') = 0.89 ✅`, `sim('television', 'tv') = 0.91 ✅` |
-| **VR** | 3/3 = **1.0** |
-| **HR** | 0/3 = **0.0** |
-| **VTAS** | 1.0 × (1 - 0.0) = **1.0** ✅ Perfect |
+### Over-count guard
 
-> **Note:** BLEU-4 would score this very low because none of the exact 4-grams match the reference. VTAS correctly scores it as perfect because the semantic meaning is identical.
+An unmatched claim whose text equals an already-matched claim (e.g. "banana" said twice, one banana detected) is a **strict hallucination**: it is never sent to CLIP, because CLIP cannot count.
 
-### Example 3: The Confident Hallucination (Where Traditional Metrics Fail)
-**Image:** A boy holding an umbrella standing near a cow.
+### Tier 2: CLIP rescue
 
-| Module | Output |
-|--------|--------|
-| **DETR** | `Set(V) = {'person', 'umbrella', 'cow'}` |
-| **NLP** | Caption: *"A group of people standing with umbrellas and dogs"* → `Set(T) = {'group', 'people', 'umbrellas', 'dogs'}` |
-| **Bridging** | `sim('people', 'person') = 0.85 ✅`, `sim('umbrellas', 'umbrella') = 0.97 ✅`, `sim('group', ...) < 0.75 ❌`, `sim('dogs', 'cow') = 0.45 ❌` |
-| **VR** | 2/3 = **0.67** (missed 'cow') |
-| **HR** | 2/4 = **0.50** (hallucinated 'group' and 'dogs') |
-| **VTAS** | 0.67 × (1 - 0.50) = **0.33** ❌ Low — correctly penalized |
+The remaining unmatched claims `U` go to CLIP. `M₂ = {u ∈ U : sim_CLIP(image, u) ≥ τ₂}` are *rescued* (grounded). Claims in `U \ M₂` plus the strict hallucinations form the hallucination list `H`.
 
-> **Note:** This is the exact hallucination issue we discovered in our BLIP zero-shot baseline during the TPA-19 project. Traditional metrics might still score this reasonably if the reference caption happens to mention "people." VTAS catches the hallucination because DETR physically confirms there is no "group" or "dogs" in the image.
+### Precision
 
-### Example 4: The Missing Reference Edge Case
-**Image:** A busy street with a car, a person, and a traffic light in the background.
+```
+P = 1 − |H| / |T|          (P = 1 when |T| = 0: no claims, no false claims)
+```
 
-| Module | Output |
-|--------|--------|
-| **DETR** | `Set(V) = {'car', 'person', 'traffic light'}` |
-| **NLP** | Caption: *"A person walks past a car near a traffic light"* → `Set(T) = {'person', 'car', 'traffic light'}` |
-| **VR** | 3/3 = **1.0** |
-| **HR** | 0/3 = **0.0** |
-| **VTAS** | 1.0 × (1 - 0.0) = **1.0** ✅ Perfect |
+### Saliency-weighted recall
 
-> **Note:** If the human annotator's reference caption only said *"A person walks on the street"* (forgetting to mention the car and traffic light), BLEU would penalize this caption for mentioning extra objects. VTAS correctly rewards it because those objects are physically present in the image.
+Each detection is weighted by its relative bounding-box area, so large objects matter more than small background ones.
 
----
+```
+plural exemption: if a plural claim ("men", "two dogs") matched a detection of label L,
+                  the other unmatched detections of label L are not counted as missed.
+recall rescue:    for each CLIP-rescued noun, take its best Tier-1 similarity over the
+                  detected labels; if that similarity > 0.30, that label is removed from `missed`
+                  (the noun is a weak synonym of a detected object, e.g. "woman" ~ "person").
 
-## 🌍 Industry Landscape & Novelty
-When defending VTAS in an academic or professional setting, it is critical to position it against the current State-of-the-Art (SOTA) evaluation metrics to demonstrate its unique engineering value.
+S_total  = Σ_{d ∈ D} a(d)  +  0.10 · |M₂|      (virtual 10% area for each object CLIP found that DETR missed)
+S_missed = Σ_{d ∈ missed} a(d)
+R        = (S_total − S_missed) / S_total        (R = 1 when S_total = 0: nothing to miss)
+```
 
-### Existing Approaches (The Baseline)
-1. **CLIPScore (VTAS v2 equivalent):** The current industry standard for reference-free evaluation. It embeds both image and text to find cosine similarity.
-   - *The Flaw:* It is a "black box". It outputs a score but cannot provide interpretability on *why* the score is low (e.g., did the model miss an object, or hallucinate one?).
-2. **LLM-as-a-Judge (VTAS v3 equivalent):** Passing the image and caption to a frontier model (like GPT-4V) to grade hallucination. 
-   - *The Flaw:* High API costs, slow latency, and reliance on closed-source models.
-3. **CHAIR (Caption Hallucination Assessment with Image Relevance):** A metric specifically designed to detect object hallucinations.
-   - *The Flaw:* It requires expensive, human-annotated ground-truth object tags. It cannot run automatically on raw, unannotated images.
+### F-beta
 
-### The VTAS v1 Novelty
-VTAS v1 is genuinely novel because of its **architectural pipeline**. It acts as an automated, white-box Compound AI System using modern transformers to solve the flaws of the existing metrics:
-- **White-Box Interpretability:** Unlike CLIPScore, VTAS explicitly extracts objects and can pinpoint exactly *which* word triggered a hallucination penalty.
-- **Fully Automated Ground Truth:** Unlike CHAIR, VTAS does not need human annotators. It uses a live Object Detector (DETR) as a mechanical eye to establish the ground truth dynamically.
-- **Semantic Robustness:** Unlike traditional NLP n-gram matching, VTAS uses sentence embeddings (`all-MiniLM-L6-v2`) as a semantic bridge, solving the vocabulary mismatch problem where "sofa" and "couch" would previously trigger false hallucination penalties.
+```
+VTAS = (1 + β²) · P · R / (β² · P + R)           (VTAS = 0 when β²·P + R = 0)
+```
+
+β = 1 is F1. As in van Rijsbergen's F-measure, β < 1 weights **precision** more (hallucinations cost more) and β > 1 weights **recall** more. Range [0, 1].
+
+### Worked example (all values verified in `tests/test_scoring.py`)
+
+Detections: person (.5), dog (.3), cup (.2). Caption nouns: man, dog, unicorn. man↔person and dog↔dog match; CLIP rejects unicorn; cup is missed.
+
+```
+P = 1 − 1/3 = 2/3        R = (1.0 − 0.2) / 1.0 = 4/5
+F1 = 2·(2/3)(4/5) / (2/3 + 4/5) = 8/11 ≈ 0.727
+```
 
 ---
 
-## 🗺️ Versioning Roadmap
+## Output
 
-### VTAS v1: The Explicit / Heavyweight Metric (Current)
-- **Pipeline:** DETR (Vision) + spaCy/NLTK (NLP Extraction) + MiniLM (Semantic Bridging)
-- **Tradeoff:** Computationally heavy (3 models in memory), but highly **interpretable**. You can print exactly which word triggered a penalty.
-- **Best For:** Debugging and development. Understanding *why* a model is failing.
-
-### VTAS v2: The Implicit / Lightweight Metric
-- **Pipeline:** CLIP only. Encode image and text into a shared embedding space. Compute cosine similarity.
-- **Tradeoff:** Extremely fast and lightweight, but a complete "black box". No interpretability on failure cases.
-- **Best For:** Production environments. Scoring millions of images at scale where speed matters more than debugging.
-- **Note:** This is functionally equivalent to CLIPScore but reframed within the VTAS framework for consistent benchmarking.
-
-### VTAS v3: LLM-as-a-Judge
-- **Pipeline:** Pass the image + caption to a frontier multimodal model (GPT-4o, Gemini Pro) with a structured grading prompt.
-- **Tradeoff:** Near-human reasoning and catches complex spatial/relational errors, but costs money (API tokens) and depends on closed-source models.
-- **Best For:** Final quality audits. Catching subtle errors that v1 and v2 miss (e.g., "the man is *behind* the car" vs. "the man is *inside* the car").
-
-### Comparison Matrix
-
-| Property | VTAS v1 | VTAS v2 | VTAS v3 |
-|----------|---------|---------|---------|
-| **Speed** | Slow | Very Fast | Slow |
-| **Cost** | Free (local) | Free (local) | Paid (API) |
-| **Interpretability** | Full (white-box) | None (black-box) | Partial (text explanation) |
-| **Spatial Reasoning** | None | Weak | Strong |
-| **Hallucination Detection** | Strong | Moderate | Very Strong |
-| **Open Source** | ✅ Yes | ✅ Yes | ❌ No |
+`score()` returns `vtas_score`, `precision`, `recall`, `detected_objects`, `text_nouns`, `matched`, `clip_grounded`, `hallucinated`, `missed`, `similarity_matrix` and `clip_scores`. (Versions before 1.3 used `visual_recall` and `hallucination_rate`; those keys no longer exist.)
 
 ---
 
-## 🚀 Implementation Strategy
-Develop VTAS as a heavily documented standalone framework. 
-Provide multiple concrete examples of how it handles edge cases that traditional metrics fail on:
-1. **The Synonym Edge Case:** Where the model is correct but uses different vocabulary than the ground truth.
-2. **The Missing Reference Edge Case:** Where the model correctly identifies a background object that the human annotator forgot to mention.
-3. **The Confident Hallucination:** Where the model describes something highly likely but factually absent from the image.
+## Known limitations of the 1.3 design
 
----
-
-## 🔬 Future Work & Optimization
-- **Dynamic Thresholding:** Eliminate the hardcoded `0.75` cosine similarity cutoff by researching dynamic thresholds or using a lightweight classifier to determine valid semantic matches.
-- **Compute Optimization:** Solve the massive computational overhead of running three separate models (BLIP, DETR, MiniLM) by exploring unified multimodal embeddings (like CLIP) to perform text-to-vision grounding in a single, lightweight forward pass.
-- **Spatial Awareness (v1.1):** Extend VTAS v1 to incorporate bounding box positions from DETR, enabling it to penalize spatial errors (e.g., "on" vs. "under" vs. "behind").
-- **Attribute-Level Grounding:** Beyond object detection, incorporate color and texture classifiers to verify attribute-level claims (e.g., "red car" vs. "blue car").
+* **Object-nouns only.** Colours, counts, relations and scene descriptions are not verified.
+* **Scene-style captions can score near zero**, because recall requires mentioning detected objects (the CLIP recall rescue softens this but does not remove it).
+* **Detector vocabulary.** DETR only knows the COCO categories; everything else relies on CLIP.
+* **Hand-set thresholds.** τ₁, τ₂, the 0.30 rescue similarity, the 0.10 bonus area and the generic-noun list were set by hand, not calibrated against labels. VTAS 2.0 replaces them with calibrated values.
+* **Person ontology.** Person synonyms are collapsed onto `person` before embedding.

@@ -1,0 +1,43 @@
+name: release
+
+# Publishes to PyPI via trusted publishing (OIDC). No API token is stored.
+# One-time setup on PyPI: project vtas-metric -> Publishing -> add a trusted
+# publisher (owner Ritanshu-Prasad, repo VTAS_Evaluation_Metric,
+# workflow release.yml, environment pypi).
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check tag matches package version
+        run: |
+          V=$(python -c "import re;print(re.search(r'__version__ = \"(.+?)\"', open('src/vtas/_version.py').read()).group(1))")
+          test "v$V" = "${GITHUB_REF_NAME}" || { echo "Tag ${GITHUB_REF_NAME} != v$V"; exit 1; }
+      - run: |
+          python -m pip install --upgrade pip build
+          python -m build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write   # required for trusted publishing
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
