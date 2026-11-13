@@ -25,6 +25,7 @@ dependencies = [
     "sentence-transformers>=2.2.0",
     "spacy>=3.5.0",
     "scipy>=1.9.0",
+    "timm",  # required by the DETR (ResNet-50) backbone
     "numpy",
     "Pillow>=9.0.0",
 ]
