@@ -9,7 +9,7 @@ description = "VTAS: Visual-Truth Alignment Score for evaluating image captions"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "Ritanshu Prasad" }]  # TODO: add real email once confirmed
+authors = [{ name = "Ritanshu Prasad", email = "prasadritanshu@gmail.com" }]
 keywords = ["image-captioning", "hallucination-detection", "evaluation-metric", "vision-language-models"]
 classifiers = [
     "Programming Language :: Python :: 3",
