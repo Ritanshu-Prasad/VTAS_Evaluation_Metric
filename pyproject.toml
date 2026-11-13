@@ -34,7 +34,7 @@ dependencies = [
 viz = ["matplotlib>=3.5.0"]
 dev = ["pytest>=7.0.0", "nltk>=3.8", "pyyaml>=6.0"]
 # Evaluation harness (harness/, not shipped in the wheel).
-harness = ["nltk>=3.8", "pyyaml>=6.0", "numpy", "requests>=2.28"]
+harness = ["nltk>=3.8", "pyyaml>=6.0", "numpy", "scipy>=1.9.0"]
 # Only needed to reproduce the paper experiments in experiments/.
 experiments = ["peft>=0.7.0", "datasets>=2.16.0", "torchao>=0.16.0", "matplotlib>=3.5.0"]
 
