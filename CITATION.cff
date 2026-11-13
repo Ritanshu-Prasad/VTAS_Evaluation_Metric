@@ -11,7 +11,7 @@ authors:
     given-names: Ritanshu
 repository-code: "https://github.com/Ritanshu-Prasad/VTAS_Evaluation_Metric"
 license: MIT
-version: "1.2.0"
+version: "1.3.1"
 date-released: "2026-10-02"
 keywords:
   - vision-language-models

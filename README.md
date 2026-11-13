@@ -10,15 +10,23 @@
 
 ---
 
-## Installation 🚀
-
-VTAS is now officially available on PyPI! You can install it instantly via pip:
+## Installation
 
 ```bash
 pip install vtas-metric
+vtas download        # one-time: fetches the spaCy model en_core_web_sm
 ```
 
-**Quickstart Usage:**
+Requires Python 3.10+. The first run also downloads the DETR, MiniLM and CLIP weights (~800 MB) from Hugging Face. To reproduce the paper experiments, use `pip install "vtas-metric[experiments]"`.
+
+> **Heads-up:** VTAS 1.x is in maintenance mode. VTAS 2.0 is coming (new claim parser, calibrated verifiers, typed results); `VTASEvaluator` already emits a `DeprecationWarning`, and 1.x scores will not be comparable with 2.0 scores. See [docs/ROADMAP_V2.md](docs/ROADMAP_V2.md).
+
+**Command line:**
+```bash
+vtas score path/to/image.jpg "A man throws a frisbee to his dog in the park"
+```
+
+**Python:**
 ```python
 from vtas import VTASEvaluator
 
@@ -42,8 +50,8 @@ You can heavily customize how strict VTAS is by tuning its hyperparameters durin
 ```python
 evaluator = VTASEvaluator(
     detection_confidence=0.7,  # How confident DETR must be to register a visual object
-    similarity_threshold=0.60, # The MiniLM Cosine distance required to match text to boxes
-    clip_threshold=0.15,       # The CLIP Cosine distance required to 'rescue' a mass noun
+    similarity_threshold=0.65, # The MiniLM Cosine distance required to match text to boxes
+    clip_threshold=0.22,       # The CLIP Cosine distance required to 'rescue' a mass noun
     beta=1.0                   # F-beta weighting (beta < 1 prioritizes Precision/Hallucinations)
 )
 ```
@@ -59,7 +67,9 @@ They compare the **generated text** against **human-written reference text**, bu
 ### The CLIPScore Hallucination Problem
 Modern reference-free metrics like **CLIPScore** act as a visual "bag of words." If a model hallucinates an object, CLIPScore simply averages it out and ignores the error, giving falsely high scores to terrible captions. 
 
-As shown in our 1,000-image COCO validation study below, VTAS actively punishes the "Hallucination Outliers" (Red Dots) that CLIPScore blindly approves:
+> **Preliminary results.** The validation-study figures reported for VTAS (including the 18.8% hallucination rate and the r = 0.30 correlation with CLIPScore) come from an exploratory run that has **not** been checked against ground-truth hallucination labels (e.g. CHAIR on COCO annotations). Treat them as preliminary; a ground-truth evaluation is in progress for VTAS 2.0.
+
+As shown in our exploratory 1,000-image COCO study below, VTAS actively punishes the "Hallucination Outliers" (Red Dots) that CLIPScore blindly approves:
 
 <img src="assets/vtas_vs_clipscore.png" alt="VTAS vs CLIPScore Scatter Plot" width="600"/>
 
@@ -122,7 +132,7 @@ VTAS (Visual-Truth Alignment Score) is a **Two-Tier Compound AI System** that ev
 1. **Tier 1 (Object Grounding):** An Object Detector (DETR) extracts physical objects. An NLP Parser (spaCy) extracts caption nouns. A Semantic Bridge (MiniLM, phrase-based) resolves synonyms.
 2. **Tier 2 (Scene/Context Grounding):** Unmatched nouns (e.g., "bedroom", "outside", or undetected objects) are verified globally against the image using CLIP zero-shot classification.
 
-The final **VTAS Score (v1.2)** uses the mathematically rigorous **F-beta Score** to balance **Object Precision** (absence of hallucinations) and **Visual Recall** (detecting visible objects) into a single metric [0, 1].
+The final **VTAS Score** uses the mathematically rigorous **F-beta Score** to balance **Object Precision** (absence of hallucinations) and **Visual Recall** (detecting visible objects) into a single metric [0, 1].
 
 ### VTAS Properties
 | Property | Value |
@@ -146,29 +156,8 @@ Unlike BLEU, VTAS physically draws bounding boxes to verify reality. Even if the
 ### Example 2: Scene Context & The "Recall Penalty"
 Traditional metrics like CHAIR crash without human bounding boxes. VTAS operates autonomously.
 * **Tier 2 Rescue:** Notice how words like "fireplace" (which DETR missed) are rescued by the CLIP context module!
-* **Visual Recall Penalty:** This caption scored an F1 of 0.00 not because it hallucinated wildly, but because it *described the scene* instead of listing the physical objects detected by DETR. 
+* **Visual Recall Penalty:** This infographic was produced with an earlier VTAS (v1.2) that scored the caption 0.00 because it *described the scene* instead of listing the objects DETR detected. Since v1.3, recall is saliency-weighted and CLIP-rescued nouns earn recall credit, which softens (but does not remove) this penalty; see Limitation 2.
 ![Hallucination and Recall Penalty](assets/hallucination_example.png)
-
----
-
-## Quick Start
-
-```python
-from vtas import VTASEvaluator
-
-evaluator = VTASEvaluator()
-
-result = evaluator.score(
-    image_path="path/to/image.jpg",
-    caption="A man throws a frisbee to his dog in the park"
-)
-
-print(f"VTAS Score (F1): {result['vtas_score']:.4f}")
-print(f"Object Precision: {result['precision']:.4f}")
-print(f"Visual Recall: {result['recall']:.4f}")
-print(f"Matched Objects: {result['matched']}")
-print(f"Hallucinated Objects: {result['hallucinated']}")
-```
 
 ---
 
@@ -182,9 +171,8 @@ print(f"Hallucinated Objects: {result['hallucinated']}")
 | **DETR detects** | `{'person', 'dog', 'frisbee'}` |
 | **Caption says** | *"A man throws a frisbee to his dog"* → `{'man', 'frisbee', 'dog'}` |
 | **Semantic Bridge** | man↔person (0.82 ✅), frisbee↔frisbee (1.0 ✅), dog↔dog (1.0 ✅) |
-| **Visual Recall** | 3/3 = 1.0 |
-| **Hallucination Rate** | 0/3 = 0.0 |
-| **VTAS** | **1.0** ✅ |
+| **Precision / Recall** | 3/3 grounded = 1.0 / 3/3 objects mentioned = 1.0 |
+| **VTAS (F1)** | **1.0** ✅ |
 
 ### Example 2: Synonym Robustness (BLEU would fail here)
 **Image:** A living room with a person, a couch, and a TV.
@@ -194,9 +182,8 @@ print(f"Hallucinated Objects: {result['hallucinated']}")
 | **DETR detects** | `{'person', 'couch', 'tv'}` |
 | **Caption says** | *"A man relaxes on a sofa watching television"* → `{'man', 'sofa', 'television'}` |
 | **Semantic Bridge** | man↔person (0.82 ✅), sofa↔couch (0.89 ✅), television↔tv (0.91 ✅) |
-| **Visual Recall** | 3/3 = 1.0 |
-| **Hallucination Rate** | 0/3 = 0.0 |
-| **VTAS** | **1.0** ✅ |
+| **Precision / Recall** | 3/3 grounded = 1.0 / 3/3 objects mentioned = 1.0 |
+| **VTAS (F1)** | **1.0** ✅ |
 
 > BLEU-4 would score this near zero because no exact 4-grams match. VTAS correctly identifies it as a perfect caption.
 
@@ -206,45 +193,13 @@ print(f"Hallucinated Objects: {result['hallucinated']}")
 | Component | Output |
 |---|---|
 | **DETR detects** | `{'person', 'umbrella', 'cow'}` |
-| **Caption says** | *"A group of people with umbrellas and dogs"* → `{'group', 'people', 'umbrellas', 'dogs'}` |
-| **Semantic Bridge** | people↔person (0.85 ✅), umbrellas↔umbrella (0.97 ✅), group↔? (❌), dogs↔cow (0.45 ❌) |
-| **Visual Recall** | 2/3 = 0.67 (missed 'cow') |
-| **Hallucination Rate** | 2/4 = 0.50 (hallucinated 'group', 'dogs') |
-| **VTAS** | **0.33** ❌ — Correctly penalized |
+| **Caption says** | *"A group of people with umbrellas and dogs"* → `{'people', 'umbrella', 'dog'}` ("group" is a filtered generic noun) |
+| **Semantic Bridge** | people↔person (0.85 ✅), umbrella↔umbrella (0.97 ✅), dog↔cow (0.45 ❌, and CLIP rejects "dog") |
+| **Precision** | 1 − 1/3 = 0.67 (hallucinated 'dog') |
+| **Recall** | 2/3 = 0.67 (missed 'cow'; equal object areas assumed) |
+| **VTAS (F1)** | **0.67** ❌ — Penalized |
 
-> This is a real hallucination observed during our BLIP zero-shot baseline evaluation. Traditional metrics may still score this reasonably if the reference caption mentions "people." VTAS catches it because DETR confirms there is no "group" or "dogs" in the image.
-
----
-
-## Installation
-
-```bash
-pip install -r requirements.txt
-```
-
-### Dependencies
-- `torch` — PyTorch backend
-- `transformers` — Hugging Face (DETR object detection)
-- `sentence-transformers` — MiniLM semantic embeddings
-- `spacy` — NLP noun extraction
-- `Pillow` — Image processing
-
----
-
-## Project Structure
-```
-VTAS_Evaluation_Metric/
-├── src/
-│   ├── vtas.py                  # Core VTAS evaluator class
-│   ├── visual_grounding.py      # DETR-based object detection module
-│   ├── linguistic_extraction.py # spaCy-based noun extraction module
-│   └── semantic_bridge.py       # MiniLM-based semantic similarity module
-├── docs/
-│   └── architecture.md          # Full architectural specification & math
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
+> This is the kind of hallucination seen in a BLIP zero-shot baseline. Traditional metrics may still score it reasonably if the reference caption mentions "people." VTAS flags it because neither DETR nor CLIP finds a dog. (Illustrative values: real scores depend on bounding-box areas.)
 
 ---
 
@@ -253,6 +208,8 @@ VTAS_Evaluation_Metric/
 VTAS v1 is a strong first step, but we believe in transparent research. The following are **known architectural limitations** that we have identified through extensive evaluation and are actively working to resolve.
 
 ### Limitation 1: Semantic Collapse in the Semantic Bridge
+
+> *Partly addressed in v1.3:* matching is now one-to-one per detected instance (Hungarian assignment), so two nouns can no longer both be grounded by a single detection. The example below was produced with the earlier set-based matcher; collapse can still occur when DETR finds one box for several people.
 
 **Observed in:** Motorcycle example (Image #78, VTAS = 1.00)
 
@@ -265,7 +222,7 @@ VTAS v1 is a strong first step, but we believe in transparent research. The foll
 
 These are two semantically distinct groups, but both collapsed onto the **single DETR label `"person"`**. VTAS treated them as the same entity. This is a fundamental limitation:
 
-> **VTAS v1 operates on unordered sets of labels.** It has no concept of *which* person is being referenced. If DETR detects one `"person"`, any number of human-related nouns ("man", "woman", "people", "boy") in the caption will all match it, even if they refer to different individuals. This inflates both Precision and Recall.
+> **Early VTAS versions operated on unordered sets of labels.** It has no concept of *which* person is being referenced. If DETR detects one `"person"`, any number of human-related nouns ("man", "woman", "people", "boy") in the caption will all match it, even if they refer to different individuals. This inflates both Precision and Recall.
 
 **Root Cause:** DETR returns *unique category labels*, not instance-level detections. Even if DETR internally draws 5 bounding boxes for 5 people, the VTAS pipeline reduces them to the single label `"person"`.
 
@@ -304,16 +261,13 @@ Based on the limitations above, we propose the following research directions for
 ---
 
 
-## Repository Structure 📂
+## Repository Structure
 
-This repository is organized into distinct modules to separate the core library from research experiments:
-
-- **src/vtas/**: The core, PyPI-installable Python package containing the metric algorithms (Semantic Bridge, CLIP Fallback, Saliency Scoring).
-- **experiments/**: The Kaggle runner scripts (
-un_evaluation.py, 
-un_baselines.py) used to generate the results and ablation studies for the paper.
-- **examples/**: Simple tutorials (atch_test_vtas.py) showing how to use the metric on custom image folders.
-- **tests/**: Unit tests for verifying metric math and extraction logic.
+- **src/vtas/**: the PyPI-installable package (detection, extraction, semantic bridge, CLIP fallback, scoring, `vtas` CLI).
+- **experiments/**: scripts used for the paper experiments (`run_evaluation.py`, `run_baselines.py`, `ablation.py`); need the `experiments` extra.
+- **examples/**: tutorials such as `batch_test_vtas.py` for scoring a folder of images.
+- **docs/**: [architecture](docs/architecture.md) (the real 1.3 maths) and the [2.0 roadmap](docs/ROADMAP_V2.md).
+- **tests/**: unit tests. `pytest -q` runs the fast CPU tests; `pytest -m integration` also loads the real spaCy/MiniLM models.
 
 ---
 
