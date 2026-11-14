@@ -1,0 +1,74 @@
+# VTAS 2.0 validation gates (docs/ROADMAP_V2.md, Section 6.2).
+#
+# Pre-registered: this file was committed BEFORE any VTAS 2.0 result was computed.
+# Thresholds must never be changed after test-split numbers have been seen.
+# Any change needs a new commit that states why and confirms the test split
+# was not looked at; a reviewer can check this file's git history.
+#
+# Protocol (Section 6.1 / 6.4): thresholds are fitted on calib, tuned on dev,
+# reported once on test. Every number carries a bootstrap 95% CI
+# (1,000 resamples over images, seed fixed). The calib split is never reported.
+#
+# Comparators: ">=" means the measured point estimate must be at least the threshold;
+# "<=" means at most. "gte_baseline" means "at least the named baseline's value
+# on the same data"; "gt_baseline" means strictly above it. "report" has no threshold.
+
+version: 1
+source: docs/ROADMAP_V2.md#62-gates-must-pass-before-the-paper-is-written
+statistics:
+  ci_level: 0.95
+  bootstrap_resamples: 1000
+  resample_unit: image
+  paired_comparisons: paired_bootstrap   # same images for both systems
+  seed: 0
+
+gates:
+  A:
+    statement: VTAS-P detects object hallucinations
+    reference: CHAIR-GT
+    split: test
+    criteria:
+      - {metric: sentence_auroc, op: ">=", threshold: 0.85}
+      - {metric: object_f1, op: ">=", threshold: 0.80}
+
+  B:
+    statement: VTAS ranks captioning systems correctly
+    n_captioners: 6
+    criteria:
+      - {metric: spearman_vs_chair_gt_system_ranking, op: ">=", threshold: 0.9}
+      - {metric: spearman_vs_thumb_human_ranking, op: ">=", threshold: 0.8}
+
+  C:
+    statement: VTAS-P tracks human precision; VTAS-R tracks human recall
+    reference: THumB 1.0
+    criteria:
+      - {metric: kendall_tau_b_vtas_p_vs_thumb_precision, op: gte_baseline, baseline: clipscore_kendall_tau_b_vs_thumb_precision}
+      - {metric: kendall_tau_b_vtas_r_vs_thumb_recall, op: gte_baseline, baseline: clipscore_kendall_tau_b_vs_thumb_recall}
+
+  D:
+    statement: Low false alarms on correct text
+    input: human reference captions
+    criteria:
+      - {metric: contradicted_rate_coco_test, op: "<=", threshold: 0.05, split: test}
+      - {metric: contradicted_rate_ood, op: "<=", threshold: 0.10}
+
+  E:
+    statement: Spatial component is real
+    criteria:
+      - {metric: vsr_test_accuracy_vtas_s, op: ">=", threshold: 0.70}
+      - {metric: vsr_test_accuracy_vtas_s, op: gt_baseline, baseline: clipscore_caption_pair_accuracy_vsr}
+      - {metric: whatsup_left_right_above_below_accuracy, op: ">=", threshold: 0.75}
+
+  F:
+    statement: Policy is standardizable
+    reference: golden set (S0.6)
+    criteria:
+      - {metric: annotator_cohen_kappa_verdicts, op: ">=", threshold: 0.7}
+      - {metric: policy_agreement_with_adjudicated_labels, op: ">=", threshold: 0.9}
+
+  G:
+    statement: Graceful degradation out of domain
+    criteria:
+      - {metric: ood_coverage_drop, op: report}   # reported, no threshold
+      - {metric: contradicted_rate_ood, op: "<=", threshold: 0.10}   # stays within Gate D
+      - {metric: silent_score_collapse, op: "==", threshold: false}

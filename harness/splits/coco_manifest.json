@@ -1,0 +1,21 @@
+{
+  "source": "COCO val2014 image ids from the Karpathy test split (dataset_coco.json)",
+  "karpathy_zip": "https://cs.stanford.edu/people/karpathy/deepimagesent/caption_datasets.zip",
+  "karpathy_zip_sha256": "4cfd70132527b80933105e5829dc9034eaab9573482e2e680abbab6130244817",
+  "method": "sorted ids -> numpy.random.default_rng(seed).permutation -> calib, dev, test in that order; each list written sorted",
+  "seed": 0,
+  "splits": {
+    "calib": {
+      "n": 1000,
+      "sha256": "41f311db7e10f52ac65b9c174d1d47c7cb915e37cfcf6008ad3510a54e173e1a"
+    },
+    "dev": {
+      "n": 1000,
+      "sha256": "acffef4e99678a645ebff21fa4901093a8eb5b2204c5f58598ffb938f445bf24"
+    },
+    "test": {
+      "n": 3000,
+      "sha256": "09fa9a8a879c1f6631e6e8ed0518da05064e71efa43c7ecbd33b8922ba83c2b4"
+    }
+  }
+}

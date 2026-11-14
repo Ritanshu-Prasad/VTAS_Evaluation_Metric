@@ -1,0 +1,11 @@
+# Third-party material in harness/
+
+`chair_synonyms.txt` is copied unchanged from
+https://github.com/LisaAnne/Hallucination/blob/6e4d33c4bedf6dfcd24c61bf527f40714717be47/data/synonyms.txt
+(Rohrbach, Hendricks, Burns, Darrell and Saenko, "Object Hallucination in Image Captioning",
+EMNLP 2018). The repository README states: "License: BSD 2-Clause license". The rules in
+`harness/chair_gt.py` (double words, animal/vehicle qualifiers, toilet-seat rule) are
+ported from `utils/chair.py` in the same repository.
+
+`harness/_pattern_singularize.py` is copied from Pattern 3.6 (CLiPS, University of Antwerp),
+BSD 3-Clause; the full license text is in that file's header.

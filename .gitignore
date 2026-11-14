@@ -34,3 +34,8 @@ results/
 
 # Scratchpad for local testing
 scratch/
+
+# Harness data (COCO, external sets, captions, per-image dumps): never commit
+data/
+# Small committed summaries (no per-image dumps) are allowed here
+!harness/results/

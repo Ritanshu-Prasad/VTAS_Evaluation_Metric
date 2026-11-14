@@ -1,0 +1,48 @@
+{
+  "metric": "CHAIR-GT",
+  "split": "dev",
+  "captioner": {
+    "model": "Salesforce/blip-image-captioning-base",
+    "revision": "82a37760796d32b1411fe092ab5d4e227313294b",
+    "variant": "paper",
+    "prompt": "a picture of ",
+    "generate": {
+      "num_beams": 3,
+      "max_length": 20,
+      "min_length": 5
+    },
+    "split": "dev",
+    "dtype": "float32",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.46.3",
+    "device": "cuda"
+  },
+  "CHAIRs": {
+    "point": 0.041,
+    "low": 0.029,
+    "high": 0.053,
+    "level": 0.95
+  },
+  "CHAIRi": {
+    "point": 0.033634126333059886,
+    "low": 0.023536261071564424,
+    "high": 0.043037974683544304,
+    "level": 0.95
+  },
+  "n_captions": 1000,
+  "n_images": 1000,
+  "n_object_mentions": 1219,
+  "n_hallucinated_mentions": 41,
+  "bootstrap": {
+    "resamples": 1000,
+    "ci": 0.95,
+    "seed": 0,
+    "unit": "image"
+  },
+  "tokenizer_check": {
+    "checked": true,
+    "n_texts": 6003,
+    "n_token_differences": 0,
+    "examples": []
+  }
+}

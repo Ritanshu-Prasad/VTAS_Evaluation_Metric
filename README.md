@@ -288,3 +288,12 @@ If you use VTAS in your research, please cite:
   license   = {MIT}
 }
 ```
+
+## Acknowledgements
+
+- The evaluation harness (`harness/`: CHAIR-GT, fixed COCO splits, dataset loaders) was
+  generated with the assistance of Claude Code and reviewed by the author.
+- CHAIR metric and synonym list: Rohrbach et al., "Object Hallucination in Image Captioning" (EMNLP 2018).
+  Pattern 3.6 `singularize` (CLiPS, University of Antwerp, BSD-3). See `harness/resources/NOTICE.md`.
+- Datasets: COCO, FOIL, THumB, Flickr8k, Pascal-50S, VSR, What'sUp, AMBER and nocaps;
+  sources and access notes are in `harness/datasets/`.
