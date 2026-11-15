@@ -267,6 +267,7 @@ Based on the limitations above, we propose the following research directions for
 - **experiments/**: scripts used for the paper experiments (`run_evaluation.py`, `run_baselines.py`, `ablation.py`); need the `experiments` extra.
 - **examples/**: tutorials such as `batch_test_vtas.py` for scoring a folder of images.
 - **docs/**: [architecture](docs/architecture.md) (the real 1.3 maths) and the [2.0 roadmap](docs/ROADMAP_V2.md).
+- **harness/**: evaluation harness for VTAS 2.0 (CHAIR-GT, fixed COCO calib/dev/test splits, pre-registered gates, external dataset loaders); see [harness/README.md](harness/README.md). Not part of the PyPI package.
 - **tests/**: unit tests. `pytest -q` runs the fast CPU tests; `pytest -m integration` also loads the real spaCy/MiniLM models.
 
 ---
