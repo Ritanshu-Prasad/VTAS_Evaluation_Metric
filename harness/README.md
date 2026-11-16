@@ -16,6 +16,8 @@ weights or per-image dumps. Commit code, split id lists and small summary JSON o
 | `coco.py` | Official COCO annotations and per-image downloads with checksums; split tools. |
 | `caption_blip.py` | BLIP-base captions at a pinned revision. |
 | `eval_chair.py` | CHAIR-GT summary for a captions file on a split. |
+| `golden/` | Golden set (S0.6): `design.py` + `golden_ids.json` (which captions), `claims_src/` (frozen claim rows), `annotate.py` (annotator and adjudication workbooks), `agreement.py` (Cohen's kappa, Krippendorff's alpha), `llava_check.py`. Rubric: `docs/GOLDEN_SET_RUBRIC.md`. |
+| `kaggle/` | Self-contained scripts for runs that do not fit the local GPU (LLaVA-1.5 golden-set captions). |
 | `datasets/` | Registry and loaders: FOIL, THumB 1.0, Flickr8k-Expert/CF, Pascal-50S, VSR, What'sUp, AMBER, nocaps val. |
 
 ```bash
@@ -24,6 +26,8 @@ python -m harness.coco images --split dev     # official val2014 images for a sp
 python -m harness.caption_blip --split dev --variant paper   # -> data/captions/
 python -m harness.eval_chair data/captions/blip_base_paper_dev.json --split dev \
        --out harness/results/chair_gt_blip_base_paper_dev.json --check-tokenizer
+python -m harness.golden.annotate build       # golden-set workbooks -> data/golden/
+python -m harness.golden.agreement A.xlsx B.xlsx --blocks P,U   # kappa / alpha
 python -m harness.datasets                    # status of the external sets
 python -m harness.datasets fetch              # download all fetchable sets
 ```
