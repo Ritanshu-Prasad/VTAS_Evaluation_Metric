@@ -7,7 +7,7 @@
 Inputs
   * harness/golden/golden_ids.json            which captions (see design.py)
   * harness/golden/claims_src/<source>.txt    frozen claim segmentation (units, no verdicts)
-  * caption text: $VTAS_DATA/captions/blip_base_paper_dev.json (BLIP),
+  * caption text: $VTAS_DATA/captions/blip_orig_paper_dev.json (BLIP),
     $VTAS_DATA/captions/llava15_7b_golden.json (LLaVA-1.5, Kaggle run) and the official
     captions_val2014.json (human references).
 Outputs (under $VTAS_DATA/golden/, never committed: they hold caption text and labels)
@@ -88,7 +88,7 @@ def load_caption_texts(design: dict, root: Path | None = None) -> dict[str, str]
     """caption_id -> text for every caption whose source file is present."""
     root = root or data_dir()
     texts: dict[str, str] = {}
-    blip_p = root / "captions" / "blip_base_paper_dev.json"
+    blip_p = root / "captions" / "blip_orig_paper_dev.json"
     llava_p = root / "captions" / "llava15_7b_golden.json"
     refs_p = root / "coco" / "annotations" / "captions_val2014.json"
     blip = json.loads(blip_p.read_text(encoding="utf-8"))["captions"] if blip_p.exists() else {}

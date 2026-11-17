@@ -304,7 +304,8 @@ Composition: 200 dev images, seed 0. The full design is in `harness/golden/desig
 | L (extension) | the 50 P images | LLaVA-1.5 long ("describe in detail") = 50 | short- vs long-caption behaviour; not in the gate |
 
 Caption sources:
-- **BLIP-base:** paper decoding; see the open issue in PROGRESS.md before relying on it.
+- **BLIP (ViT-B):** original Salesforce code and COCO caption checkpoint, paper decoding
+  (`harness/caption_blip_orig.py`).
 - **LLaVA-1.5-7B:** `harness/kaggle/llava15_golden_captions.py`, pinned revision,
   greedy decoding.
 - **Human:** one official COCO reference per image, drawn with the seed.
