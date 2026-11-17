@@ -190,6 +190,15 @@ Timeline assumes one person, Kaggle for light runs and the RTX PRO 6000 for full
 ### Phase 5 — Adoption (ongoing)
 lmms-eval / VLMEvalKit integration PRs, public leaderboard JSON, policy-file contributions via PRs, demo notebook, issue triage. This phase is what turns a 9 into a 10 and cannot be scheduled.
 
+### Plug-in domain detectors (design note)
+
+Domains outside COCO (for example astronomy) are served by user-supplied detectors behind a verifier interface, not by changes to the core metric.
+
+- **Interface (Chat 4 defines it).** A plug-in takes an image and a claim and returns SUPPORTED, CONTRADICTED or UNVERIFIABLE, plus evidence and a confidence.
+- **Own calibration and policy.** Each plug-in ships a small calibration set and a policy file, in the same format as Concept Policy v1.
+- **Uncalibrated plug-ins.** A plug-in without a calibration file may support a claim but never contradict it. Its failures map to UNVERIFIABLE.
+- **Docs (Phase 5).** Plug-in authoring guide and an example plug-in.
+
 ---
 
 ## 5A. Claude model and effort assignment per step

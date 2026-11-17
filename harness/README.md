@@ -17,7 +17,7 @@ weights or per-image dumps. Commit code, split id lists and small summary JSON o
 | `caption_blip_orig.py` | BLIP captions with the original Salesforce code and COCO caption checkpoint (pinned commit, SHA-256 checked, weights-only load). Use this one. |
 | `caption_blip.py` | **Defective, do not use**: the Hugging Face BLIP-base checkpoint drops WordPiece continuations ("gi" for giraffe). Kept for the record. |
 | `eval_chair.py` | CHAIR-GT summary for a captions file on a split. |
-| `golden/` | Golden set (S0.6): `design.py` + `golden_ids.json` (which captions), `claims_src/` (frozen claim rows), `annotate.py` (annotator and adjudication workbooks), `agreement.py` (Cohen's kappa, Krippendorff's alpha), `llava_check.py`. Rubric: `docs/GOLDEN_SET_RUBRIC.md`. |
+| `golden/` | Golden set (S0.6): `design.py` + `golden_ids.json` (which captions), `claims_src/` (frozen claim rows; local only, gitignored because they quote COCO and model captions), `annotate.py` (annotator and adjudication workbooks), `agreement.py` (Cohen's kappa, Krippendorff's alpha), `llava_check.py`. Rubric: `docs/GOLDEN_SET_RUBRIC.md`. |
 | `kaggle/` | Self-contained scripts for runs that do not fit the local GPU (LLaVA-1.5 golden-set captions). |
 | `datasets/` | Registry and loaders: FOIL, THumB 1.0, Flickr8k-Expert/CF, Pascal-50S, VSR, What'sUp, AMBER, nocaps val. |
 
