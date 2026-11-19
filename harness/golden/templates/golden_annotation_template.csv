@@ -1,0 +1,6 @@
+claim_id,caption_gid,image_id,image_url,caption,claim_no,type,claim_text,verdict,visible_count,flag,note
+g000#01,g000,0,,two dogs playing on a red couch,1,object,dogs,supported,,,
+g000#02,g000,0,,two dogs playing on a red couch,2,count,two dogs,contradicted,3,,three dogs visible; third partly behind cushion
+g000#03,g000,0,,two dogs playing on a red couch,3,attribute,dogs: playing,unverifiable,,,dogs lying still; playing cannot be confirmed or ruled out from one frame
+g000#04,g000,0,,two dogs playing on a red couch,4,relation,dogs / on / couch,supported,,,
+g000#05,g000,0,,two dogs playing on a red couch,5,attribute,couch: red,contradicted,,,couch is clearly brown

@@ -1,5 +1,10 @@
 """Generate BLIP-base captions for a COCO split (pinned model revision).
 
+DEFECTIVE - DO NOT USE FOR RESULTS. Kept only to document the Chat 1 problem.
+The Hugging Face checkpoint never emits WordPiece continuation tokens ("a gi in a zoo"
+for giraffe, "frc", "fire hydra", "pew pew pew ..."), so CHAIR misses those objects.
+Use ``harness.caption_blip_orig`` (original Salesforce code and checkpoint) instead.
+
     python -m harness.caption_blip --split dev
 
 Writes ``$VTAS_DATA/captions/blip_base_<variant>_<split>.json`` = {"config": ...,

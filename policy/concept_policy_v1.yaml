@@ -1,0 +1,114 @@
+# VTAS Concept Policy v1 -- DRAFT (docs/ROADMAP_V2.md, Section 4).
+#
+# Status: draft written in Chat 2 (golden set). Not loaded by any code yet; VTAS 1.x is
+# unaffected. The plan places the runtime copy at vtas/policy/concept_policy_v1.yaml
+# (shipped in the package); it moves there when the 2.0 verdict engine loads it.
+#
+# Rules for editing:
+#   * Values marked fit_from_data are fitted ONCE on the golden-set human count
+#     judgments (visible_count column, adjudicated), then frozen here with a commit
+#     that records the fit (n, method, date). They are never tuned on test numbers.
+#   * The paper states the policy version used. Any change to a frozen value is a new
+#     policy version (concept_policy_v2.yaml), not an edit of v1.
+
+policy: concept_policy
+version: "1.0.0-draft"
+status: draft
+source: docs/ROADMAP_V2.md#4-concept-policy-v1-standardization
+
+verdicts: [SUPPORTED, CONTRADICTED, UNVERIFIABLE]
+claim_types: [object, count, attribute, relation, scene]
+
+# ---- 4.3 Strictness profiles ------------------------------------------------------------
+# A profile changes: synonym leeway, count tolerance, soft attribute checks and the
+# false-positive rate used when calibrating verifier thresholds.
+profiles:
+  default: standard
+  strict:
+    calibration_fpr: 0.02
+    synonym_leeway: parent_only        # specific term must match the visible class or a hyponym
+    soft_attribute_check: contradict_if_attribute_verifier_and_vlm_probe_both_disagree
+  standard:
+    calibration_fpr: 0.05
+    synonym_leeway: parent_with_soft_check
+    soft_attribute_check: unverifiable_on_failure   # never CONTRADICTED in standard
+  lenient:
+    calibration_fpr: 0.10
+    synonym_leeway: parent_with_soft_check
+    soft_attribute_check: ignore       # draft reading of 4.3: lenient skips the soft check
+
+# ---- 4.1 Specific vs general terms ------------------------------------------------------
+specific_vs_general:
+  general_term:
+    rule: SUPPORTED by any visible instance of a more specific term in its hyponym set.
+    example: {term: person, supported_by: [boy, girl, man, woman, player, rider, child, baby]}
+  specific_term:
+    rule: >
+      SUPPORTED at the parent level when the parent class is visible, plus an optional
+      soft check of the distinguishing attribute (e.g. boy -> person detected + age/gender
+      probe). Failed soft check: standard -> UNVERIFIABLE (never CONTRADICTED);
+      strict -> CONTRADICTED only if both the attribute verifier and the VLM probe disagree.
+    example: {term: boy, parent: person, soft_check: [age, gender]}
+  hyponym_sets:
+    sources: [wordnet, reviewed_override_file]
+    override_file: policy/hyponym_overrides_v1.yaml   # to be written (Chat 3/8)
+    embedding_similarity_for_synonymy: false          # MiniLM no longer used for synonymy
+
+# ---- 4.2 Counts and collective nouns ----------------------------------------------------
+# Every noun phrase claims an interval [min, max] of visible instances (max: null = no
+# upper bound). Two phrases cannot claim the same instance: instances are assigned with
+# the Hungarian algorithm over instances, not labels (ends the man/people collapse).
+counts:
+  instance_assignment: hungarian_over_instances
+  expressions:
+    singular:                       # "a X", "one X", "the X"
+      patterns: ["a X", "an X", "one X", "the X"]
+      interval:
+        strict: [1, 1]
+        standard: [1, 2]            # one salient instance + tolerance for cropped duplicates
+        lenient: [1, null]
+    numeral:                        # "two X", "three X", ...
+      patterns: ["<N> X"]
+      tolerance:                    # interval = [N - tol, N + tol]
+        strict: 0                   # plan gives standard and lenient only; strict assumed = standard
+        standard: 0
+        lenient: 1
+    plural:                         # bare plural, "some X", "a few X"
+      patterns: ["Xs", "some X", "a few X"]
+      interval: {strict: [2, null], standard: [2, null], lenient: [2, null]}
+    pair:
+      patterns: ["a couple of X", "a pair of X"]
+      interval:
+        strict: [2, 2]              # plan gives standard and lenient only; strict assumed = standard
+        standard: [2, 2]
+        lenient: [2, 3]
+    several:
+      patterns: ["several X"]
+      interval: fit_from_data
+      plan_prior: [3, null]         # Section 4.2 table; replaced by the fitted interval
+    group:
+      patterns: ["a group of X"]
+      interval: fit_from_data
+      plan_prior: [3, null]
+    crowd:
+      patterns: ["a crowd", "crowds", "a crowd of X"]
+      interval: fit_from_data
+      plan_prior: [6, null]
+    many:
+      patterns: ["many X", "many people"]
+      interval: fit_from_data
+      plan_prior: [6, null]
+  fit:
+    data: golden set, adjudicated visible_count of count claims (harness/golden)
+    method: to be fixed before fitting (draft proposal - lower bound = 10th percentile of
+      adjudicated visible counts per expression, upper bound open; report n per expression)
+    min_n_per_expression: 15        # draft: below this, keep plan_prior and flag it
+
+# ---- 4.4 Out-of-vocabulary handling -----------------------------------------------------
+out_of_vocabulary:
+  rule: >
+    If a claim's head noun is outside every verifier's trusted vocabulary, the claim is
+    UNVERIFIABLE by construction and lowers Coverage.
+  trusted_vocabulary:
+    per_class_recall_min: 0.6
+    measured_on: calib

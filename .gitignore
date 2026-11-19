@@ -39,3 +39,6 @@ scratch/
 data/
 # Small committed summaries (no per-image dumps) are allowed here
 !harness/results/
+
+# Golden-set claim rows quote COCO refs (CC BY 4.0) and model captions: keep local
+harness/golden/claims_src/

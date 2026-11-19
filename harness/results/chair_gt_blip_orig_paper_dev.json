@@ -1,0 +1,58 @@
+{
+  "metric": "CHAIR-GT",
+  "split": "dev",
+  "captioner": {
+    "implementation": "salesforce/BLIP (original code)",
+    "blip_commit": "056a169437371659074aa2732649d5de3bffb4a8",
+    "checkpoint": "model_base_caption_capfilt_large.pth",
+    "checkpoint_sha256": "96ac8749bd0a568c274ebe302b3a3748ab9be614c737f3d8c529697139174086",
+    "tokenizer": "google-bert/bert-base-uncased",
+    "tokenizer_revision": "86b5e0934494bd15c9632b12f734a8a67f723594",
+    "variant": "paper",
+    "prompt": "a picture of ",
+    "generate": {
+      "num_beams": 3,
+      "max_length": 20,
+      "min_length": 5,
+      "repetition_penalty": 1.0
+    },
+    "image_size": 384,
+    "batch_size": 1,
+    "dtype": "float32",
+    "device": "cuda",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.46.3",
+    "timm": "1.0.22",
+    "unexpected_checkpoint_keys": 0,
+    "deviation": "image_embeds not repeated per beam (transformers >= 4.27 does it)",
+    "split": "dev"
+  },
+  "CHAIRs": {
+    "point": 0.043,
+    "low": 0.03,
+    "high": 0.055,
+    "level": 0.95
+  },
+  "CHAIRi": {
+    "point": 0.027777777777777776,
+    "low": 0.019691751269035534,
+    "high": 0.035602164794518,
+    "level": 0.95
+  },
+  "n_captions": 1000,
+  "n_images": 1000,
+  "n_object_mentions": 1584,
+  "n_hallucinated_mentions": 44,
+  "bootstrap": {
+    "resamples": 1000,
+    "ci": 0.95,
+    "seed": 0,
+    "unit": "image"
+  },
+  "tokenizer_check": {
+    "checked": true,
+    "n_texts": 6003,
+    "n_token_differences": 0,
+    "examples": []
+  }
+}

@@ -1,0 +1,2673 @@
+{
+ "description": "Golden set captions (plan S0.6). See harness/golden/design.py.",
+ "split": "dev",
+ "seed": 0,
+ "n_images": 200,
+ "core_sources": [
+  "blip",
+  "llava_short",
+  "human"
+ ],
+ "extension_sources": [
+  "llava_long"
+ ],
+ "counts": {
+  "P": 150,
+  "U": 150,
+  "L": 50
+ },
+ "llava_image_ids": [
+  2453,
+  10400,
+  11181,
+  20598,
+  30925,
+  31965,
+  39081,
+  40446,
+  49014,
+  49688,
+  74209,
+  75173,
+  75990,
+  84735,
+  87399,
+  87617,
+  106048,
+  108338,
+  108853,
+  113223,
+  114941,
+  125071,
+  151790,
+  166124,
+  168093,
+  182683,
+  183014,
+  185639,
+  188077,
+  195648,
+  198176,
+  201207,
+  206851,
+  208516,
+  211120,
+  212285,
+  229014,
+  231685,
+  249623,
+  252220,
+  260966,
+  264347,
+  266977,
+  267349,
+  270505,
+  274398,
+  280909,
+  288202,
+  291664,
+  292170,
+  295728,
+  301817,
+  305000,
+  313182,
+  325153,
+  325991,
+  326344,
+  326968,
+  360610,
+  361860,
+  364166,
+  375285,
+  375324,
+  391199,
+  393777,
+  397042,
+  403421,
+  407072,
+  409217,
+  420546,
+  424880,
+  443887,
+  444302,
+  451972,
+  453297,
+  458755,
+  468935,
+  468993,
+  471641,
+  475403,
+  491497,
+  495081,
+  499198,
+  506201,
+  506458,
+  520108,
+  525568,
+  529592,
+  533013,
+  539784,
+  539904,
+  540280,
+  541478,
+  552564,
+  554749,
+  562592,
+  564091,
+  571990,
+  577866,
+  580591
+ ],
+ "items": [
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 2453,
+   "caption_id": "blip-2453",
+   "gid": "g318"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 10400,
+   "caption_id": "blip-10400",
+   "gid": "g197"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 20598,
+   "caption_id": "blip-20598",
+   "gid": "g212"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 31965,
+   "caption_id": "blip-31965",
+   "gid": "g207"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 39081,
+   "caption_id": "blip-39081",
+   "gid": "g145"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 40446,
+   "caption_id": "blip-40446",
+   "gid": "g201"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 49688,
+   "caption_id": "blip-49688",
+   "gid": "g296"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 75173,
+   "caption_id": "blip-75173",
+   "gid": "g033"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 84735,
+   "caption_id": "blip-84735",
+   "gid": "g260"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 87399,
+   "caption_id": "blip-87399",
+   "gid": "g080"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 87617,
+   "caption_id": "blip-87617",
+   "gid": "g292"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 108853,
+   "caption_id": "blip-108853",
+   "gid": "g248"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 113223,
+   "caption_id": "blip-113223",
+   "gid": "g337"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 114941,
+   "caption_id": "blip-114941",
+   "gid": "g283"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 125071,
+   "caption_id": "blip-125071",
+   "gid": "g270"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 151790,
+   "caption_id": "blip-151790",
+   "gid": "g090"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 182683,
+   "caption_id": "blip-182683",
+   "gid": "g135"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 185639,
+   "caption_id": "blip-185639",
+   "gid": "g136"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 195648,
+   "caption_id": "blip-195648",
+   "gid": "g174"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 208516,
+   "caption_id": "blip-208516",
+   "gid": "g053"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 211120,
+   "caption_id": "blip-211120",
+   "gid": "g202"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 212285,
+   "caption_id": "blip-212285",
+   "gid": "g241"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 231685,
+   "caption_id": "blip-231685",
+   "gid": "g227"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 260966,
+   "caption_id": "blip-260966",
+   "gid": "g115"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 264347,
+   "caption_id": "blip-264347",
+   "gid": "g327"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 280909,
+   "caption_id": "blip-280909",
+   "gid": "g273"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 291664,
+   "caption_id": "blip-291664",
+   "gid": "g099"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 292170,
+   "caption_id": "blip-292170",
+   "gid": "g159"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 295728,
+   "caption_id": "blip-295728",
+   "gid": "g054"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 325991,
+   "caption_id": "blip-325991",
+   "gid": "g158"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 326344,
+   "caption_id": "blip-326344",
+   "gid": "g213"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 326968,
+   "caption_id": "blip-326968",
+   "gid": "g083"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 361860,
+   "caption_id": "blip-361860",
+   "gid": "g297"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 375285,
+   "caption_id": "blip-375285",
+   "gid": "g087"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 375324,
+   "caption_id": "blip-375324",
+   "gid": "g251"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 391199,
+   "caption_id": "blip-391199",
+   "gid": "g304"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 397042,
+   "caption_id": "blip-397042",
+   "gid": "g149"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 403421,
+   "caption_id": "blip-403421",
+   "gid": "g013"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 409217,
+   "caption_id": "blip-409217",
+   "gid": "g280"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 424880,
+   "caption_id": "blip-424880",
+   "gid": "g109"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 444302,
+   "caption_id": "blip-444302",
+   "gid": "g049"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 468935,
+   "caption_id": "blip-468935",
+   "gid": "g343"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 468993,
+   "caption_id": "blip-468993",
+   "gid": "g165"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 520108,
+   "caption_id": "blip-520108",
+   "gid": "g032"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 525568,
+   "caption_id": "blip-525568",
+   "gid": "g254"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 529592,
+   "caption_id": "blip-529592",
+   "gid": "g091"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 539904,
+   "caption_id": "blip-539904",
+   "gid": "g219"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 552564,
+   "caption_id": "blip-552564",
+   "gid": "g180"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 554749,
+   "caption_id": "blip-554749",
+   "gid": "g334"
+  },
+  {
+   "source": "blip",
+   "block": "P",
+   "image_id": 564091,
+   "caption_id": "blip-564091",
+   "gid": "g012"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 2453,
+   "caption_id": "llava_short-2453",
+   "gid": "g114"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 10400,
+   "caption_id": "llava_short-10400",
+   "gid": "g019"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 20598,
+   "caption_id": "llava_short-20598",
+   "gid": "g268"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 31965,
+   "caption_id": "llava_short-31965",
+   "gid": "g345"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 39081,
+   "caption_id": "llava_short-39081",
+   "gid": "g113"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 40446,
+   "caption_id": "llava_short-40446",
+   "gid": "g289"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 49688,
+   "caption_id": "llava_short-49688",
+   "gid": "g291"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 75173,
+   "caption_id": "llava_short-75173",
+   "gid": "g024"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 84735,
+   "caption_id": "llava_short-84735",
+   "gid": "g316"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 87399,
+   "caption_id": "llava_short-87399",
+   "gid": "g178"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 87617,
+   "caption_id": "llava_short-87617",
+   "gid": "g233"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 108853,
+   "caption_id": "llava_short-108853",
+   "gid": "g131"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 113223,
+   "caption_id": "llava_short-113223",
+   "gid": "g252"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 114941,
+   "caption_id": "llava_short-114941",
+   "gid": "g079"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 125071,
+   "caption_id": "llava_short-125071",
+   "gid": "g224"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 151790,
+   "caption_id": "llava_short-151790",
+   "gid": "g137"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 182683,
+   "caption_id": "llava_short-182683",
+   "gid": "g127"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 185639,
+   "caption_id": "llava_short-185639",
+   "gid": "g072"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 195648,
+   "caption_id": "llava_short-195648",
+   "gid": "g349"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 208516,
+   "caption_id": "llava_short-208516",
+   "gid": "g293"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 211120,
+   "caption_id": "llava_short-211120",
+   "gid": "g306"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 212285,
+   "caption_id": "llava_short-212285",
+   "gid": "g068"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 231685,
+   "caption_id": "llava_short-231685",
+   "gid": "g249"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 260966,
+   "caption_id": "llava_short-260966",
+   "gid": "g105"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 264347,
+   "caption_id": "llava_short-264347",
+   "gid": "g300"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 280909,
+   "caption_id": "llava_short-280909",
+   "gid": "g238"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 291664,
+   "caption_id": "llava_short-291664",
+   "gid": "g311"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 292170,
+   "caption_id": "llava_short-292170",
+   "gid": "g193"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 295728,
+   "caption_id": "llava_short-295728",
+   "gid": "g323"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 325991,
+   "caption_id": "llava_short-325991",
+   "gid": "g245"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 326344,
+   "caption_id": "llava_short-326344",
+   "gid": "g007"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 326968,
+   "caption_id": "llava_short-326968",
+   "gid": "g094"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 361860,
+   "caption_id": "llava_short-361860",
+   "gid": "g184"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 375285,
+   "caption_id": "llava_short-375285",
+   "gid": "g051"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 375324,
+   "caption_id": "llava_short-375324",
+   "gid": "g108"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 391199,
+   "caption_id": "llava_short-391199",
+   "gid": "g029"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 397042,
+   "caption_id": "llava_short-397042",
+   "gid": "g195"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 403421,
+   "caption_id": "llava_short-403421",
+   "gid": "g321"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 409217,
+   "caption_id": "llava_short-409217",
+   "gid": "g266"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 424880,
+   "caption_id": "llava_short-424880",
+   "gid": "g027"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 444302,
+   "caption_id": "llava_short-444302",
+   "gid": "g307"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 468935,
+   "caption_id": "llava_short-468935",
+   "gid": "g230"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 468993,
+   "caption_id": "llava_short-468993",
+   "gid": "g175"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 520108,
+   "caption_id": "llava_short-520108",
+   "gid": "g204"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 525568,
+   "caption_id": "llava_short-525568",
+   "gid": "g030"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 529592,
+   "caption_id": "llava_short-529592",
+   "gid": "g001"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 539904,
+   "caption_id": "llava_short-539904",
+   "gid": "g276"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 552564,
+   "caption_id": "llava_short-552564",
+   "gid": "g278"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 554749,
+   "caption_id": "llava_short-554749",
+   "gid": "g155"
+  },
+  {
+   "source": "llava_short",
+   "block": "P",
+   "image_id": 564091,
+   "caption_id": "llava_short-564091",
+   "gid": "g199"
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 2453,
+   "caption_id": "human-2453",
+   "gid": "g140",
+   "ref_annotation_id": 70668
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 10400,
+   "caption_id": "human-10400",
+   "gid": "g305",
+   "ref_annotation_id": 58141
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 20598,
+   "caption_id": "human-20598",
+   "gid": "g082",
+   "ref_annotation_id": 565905
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 31965,
+   "caption_id": "human-31965",
+   "gid": "g298",
+   "ref_annotation_id": 810231
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 39081,
+   "caption_id": "human-39081",
+   "gid": "g322",
+   "ref_annotation_id": 315710
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 40446,
+   "caption_id": "human-40446",
+   "gid": "g062",
+   "ref_annotation_id": 150355
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 49688,
+   "caption_id": "human-49688",
+   "gid": "g066",
+   "ref_annotation_id": 535944
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 75173,
+   "caption_id": "human-75173",
+   "gid": "g166",
+   "ref_annotation_id": 781855
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 84735,
+   "caption_id": "human-84735",
+   "gid": "g295",
+   "ref_annotation_id": 653641
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 87399,
+   "caption_id": "human-87399",
+   "gid": "g037",
+   "ref_annotation_id": 617270
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 87617,
+   "caption_id": "human-87617",
+   "gid": "g098",
+   "ref_annotation_id": 341714
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 108853,
+   "caption_id": "human-108853",
+   "gid": "g119",
+   "ref_annotation_id": 579351
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 113223,
+   "caption_id": "human-113223",
+   "gid": "g006",
+   "ref_annotation_id": 192596
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 114941,
+   "caption_id": "human-114941",
+   "gid": "g319",
+   "ref_annotation_id": 356911
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 125071,
+   "caption_id": "human-125071",
+   "gid": "g187",
+   "ref_annotation_id": 50141
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 151790,
+   "caption_id": "human-151790",
+   "gid": "g060",
+   "ref_annotation_id": 388085
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 182683,
+   "caption_id": "human-182683",
+   "gid": "g236",
+   "ref_annotation_id": 718948
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 185639,
+   "caption_id": "human-185639",
+   "gid": "g043",
+   "ref_annotation_id": 409741
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 195648,
+   "caption_id": "human-195648",
+   "gid": "g237",
+   "ref_annotation_id": 145657
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 208516,
+   "caption_id": "human-208516",
+   "gid": "g198",
+   "ref_annotation_id": 451849
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 211120,
+   "caption_id": "human-211120",
+   "gid": "g338",
+   "ref_annotation_id": 772286
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 212285,
+   "caption_id": "human-212285",
+   "gid": "g151",
+   "ref_annotation_id": 603864
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 231685,
+   "caption_id": "human-231685",
+   "gid": "g247",
+   "ref_annotation_id": 112337
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 260966,
+   "caption_id": "human-260966",
+   "gid": "g262",
+   "ref_annotation_id": 366613
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 264347,
+   "caption_id": "human-264347",
+   "gid": "g176",
+   "ref_annotation_id": 760498
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 280909,
+   "caption_id": "human-280909",
+   "gid": "g130",
+   "ref_annotation_id": 646552
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 291664,
+   "caption_id": "human-291664",
+   "gid": "g185",
+   "ref_annotation_id": 46464
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 292170,
+   "caption_id": "human-292170",
+   "gid": "g046",
+   "ref_annotation_id": 500565
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 295728,
+   "caption_id": "human-295728",
+   "gid": "g167",
+   "ref_annotation_id": 316844
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 325991,
+   "caption_id": "human-325991",
+   "gid": "g128",
+   "ref_annotation_id": 492155
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 326344,
+   "caption_id": "human-326344",
+   "gid": "g200",
+   "ref_annotation_id": 463644
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 326968,
+   "caption_id": "human-326968",
+   "gid": "g183",
+   "ref_annotation_id": 623133
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 361860,
+   "caption_id": "human-361860",
+   "gid": "g039",
+   "ref_annotation_id": 822189
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 375285,
+   "caption_id": "human-375285",
+   "gid": "g235",
+   "ref_annotation_id": 625784
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 375324,
+   "caption_id": "human-375324",
+   "gid": "g081",
+   "ref_annotation_id": 681956
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 391199,
+   "caption_id": "human-391199",
+   "gid": "g211",
+   "ref_annotation_id": 299764
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 397042,
+   "caption_id": "human-397042",
+   "gid": "g308",
+   "ref_annotation_id": 761129
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 403421,
+   "caption_id": "human-403421",
+   "gid": "g169",
+   "ref_annotation_id": 179299
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 409217,
+   "caption_id": "human-409217",
+   "gid": "g341",
+   "ref_annotation_id": 354402
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 424880,
+   "caption_id": "human-424880",
+   "gid": "g075",
+   "ref_annotation_id": 208399
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 444302,
+   "caption_id": "human-444302",
+   "gid": "g048",
+   "ref_annotation_id": 10716
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 468935,
+   "caption_id": "human-468935",
+   "gid": "g016",
+   "ref_annotation_id": 452908
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 468993,
+   "caption_id": "human-468993",
+   "gid": "g232",
+   "ref_annotation_id": 361329
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 520108,
+   "caption_id": "human-520108",
+   "gid": "g023",
+   "ref_annotation_id": 320541
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 525568,
+   "caption_id": "human-525568",
+   "gid": "g320",
+   "ref_annotation_id": 462259
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 529592,
+   "caption_id": "human-529592",
+   "gid": "g172",
+   "ref_annotation_id": 816623
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 539904,
+   "caption_id": "human-539904",
+   "gid": "g277",
+   "ref_annotation_id": 710222
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 552564,
+   "caption_id": "human-552564",
+   "gid": "g217",
+   "ref_annotation_id": 66475
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 554749,
+   "caption_id": "human-554749",
+   "gid": "g040",
+   "ref_annotation_id": 75992
+  },
+  {
+   "source": "human",
+   "block": "P",
+   "image_id": 564091,
+   "caption_id": "human-564091",
+   "gid": "g257",
+   "ref_annotation_id": 130922
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 636,
+   "caption_id": "blip-636",
+   "gid": "g181"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 4972,
+   "caption_id": "blip-4972",
+   "gid": "g018"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 24207,
+   "caption_id": "blip-24207",
+   "gid": "g267"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 26609,
+   "caption_id": "blip-26609",
+   "gid": "g011"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 33990,
+   "caption_id": "blip-33990",
+   "gid": "g281"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 47596,
+   "caption_id": "blip-47596",
+   "gid": "g156"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 58329,
+   "caption_id": "blip-58329",
+   "gid": "g036"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 66072,
+   "caption_id": "blip-66072",
+   "gid": "g056"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 104568,
+   "caption_id": "blip-104568",
+   "gid": "g339"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 114303,
+   "caption_id": "blip-114303",
+   "gid": "g111"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 118154,
+   "caption_id": "blip-118154",
+   "gid": "g315"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 123836,
+   "caption_id": "blip-123836",
+   "gid": "g215"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 141317,
+   "caption_id": "blip-141317",
+   "gid": "g216"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 154670,
+   "caption_id": "blip-154670",
+   "gid": "g117"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 157184,
+   "caption_id": "blip-157184",
+   "gid": "g228"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 158722,
+   "caption_id": "blip-158722",
+   "gid": "g124"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 159044,
+   "caption_id": "blip-159044",
+   "gid": "g171"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 162398,
+   "caption_id": "blip-162398",
+   "gid": "g346"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 168243,
+   "caption_id": "blip-168243",
+   "gid": "g264"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 169757,
+   "caption_id": "blip-169757",
+   "gid": "g009"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 186747,
+   "caption_id": "blip-186747",
+   "gid": "g182"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 205101,
+   "caption_id": "blip-205101",
+   "gid": "g177"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 223930,
+   "caption_id": "blip-223930",
+   "gid": "g152"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 230936,
+   "caption_id": "blip-230936",
+   "gid": "g179"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 248616,
+   "caption_id": "blip-248616",
+   "gid": "g088"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 253810,
+   "caption_id": "blip-253810",
+   "gid": "g141"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 275881,
+   "caption_id": "blip-275881",
+   "gid": "g070"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 281924,
+   "caption_id": "blip-281924",
+   "gid": "g285"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 295837,
+   "caption_id": "blip-295837",
+   "gid": "g101"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 297372,
+   "caption_id": "blip-297372",
+   "gid": "g112"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 302716,
+   "caption_id": "blip-302716",
+   "gid": "g147"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 312692,
+   "caption_id": "blip-312692",
+   "gid": "g003"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 318130,
+   "caption_id": "blip-318130",
+   "gid": "g139"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 324837,
+   "caption_id": "blip-324837",
+   "gid": "g261"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 335099,
+   "caption_id": "blip-335099",
+   "gid": "g310"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 343394,
+   "caption_id": "blip-343394",
+   "gid": "g028"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 360346,
+   "caption_id": "blip-360346",
+   "gid": "g205"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 368220,
+   "caption_id": "blip-368220",
+   "gid": "g303"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 382041,
+   "caption_id": "blip-382041",
+   "gid": "g162"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 398882,
+   "caption_id": "blip-398882",
+   "gid": "g067"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 407943,
+   "caption_id": "blip-407943",
+   "gid": "g170"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 441363,
+   "caption_id": "blip-441363",
+   "gid": "g210"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 482022,
+   "caption_id": "blip-482022",
+   "gid": "g330"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 488697,
+   "caption_id": "blip-488697",
+   "gid": "g144"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 537007,
+   "caption_id": "blip-537007",
+   "gid": "g005"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 553221,
+   "caption_id": "blip-553221",
+   "gid": "g015"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 557552,
+   "caption_id": "blip-557552",
+   "gid": "g173"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 568132,
+   "caption_id": "blip-568132",
+   "gid": "g192"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 570138,
+   "caption_id": "blip-570138",
+   "gid": "g133"
+  },
+  {
+   "source": "blip",
+   "block": "U",
+   "image_id": 570834,
+   "caption_id": "blip-570834",
+   "gid": "g076"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 11181,
+   "caption_id": "llava_short-11181",
+   "gid": "g347"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 30925,
+   "caption_id": "llava_short-30925",
+   "gid": "g121"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 49014,
+   "caption_id": "llava_short-49014",
+   "gid": "g142"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 74209,
+   "caption_id": "llava_short-74209",
+   "gid": "g092"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 75990,
+   "caption_id": "llava_short-75990",
+   "gid": "g034"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 106048,
+   "caption_id": "llava_short-106048",
+   "gid": "g143"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 108338,
+   "caption_id": "llava_short-108338",
+   "gid": "g325"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 166124,
+   "caption_id": "llava_short-166124",
+   "gid": "g328"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 168093,
+   "caption_id": "llava_short-168093",
+   "gid": "g259"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 183014,
+   "caption_id": "llava_short-183014",
+   "gid": "g294"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 188077,
+   "caption_id": "llava_short-188077",
+   "gid": "g014"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 198176,
+   "caption_id": "llava_short-198176",
+   "gid": "g095"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 201207,
+   "caption_id": "llava_short-201207",
+   "gid": "g126"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 206851,
+   "caption_id": "llava_short-206851",
+   "gid": "g116"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 229014,
+   "caption_id": "llava_short-229014",
+   "gid": "g336"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 249623,
+   "caption_id": "llava_short-249623",
+   "gid": "g312"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 252220,
+   "caption_id": "llava_short-252220",
+   "gid": "g275"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 266977,
+   "caption_id": "llava_short-266977",
+   "gid": "g335"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 267349,
+   "caption_id": "llava_short-267349",
+   "gid": "g243"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 270505,
+   "caption_id": "llava_short-270505",
+   "gid": "g093"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 274398,
+   "caption_id": "llava_short-274398",
+   "gid": "g148"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 288202,
+   "caption_id": "llava_short-288202",
+   "gid": "g057"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 301817,
+   "caption_id": "llava_short-301817",
+   "gid": "g052"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 305000,
+   "caption_id": "llava_short-305000",
+   "gid": "g223"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 313182,
+   "caption_id": "llava_short-313182",
+   "gid": "g239"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 325153,
+   "caption_id": "llava_short-325153",
+   "gid": "g344"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 360610,
+   "caption_id": "llava_short-360610",
+   "gid": "g282"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 364166,
+   "caption_id": "llava_short-364166",
+   "gid": "g077"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 393777,
+   "caption_id": "llava_short-393777",
+   "gid": "g084"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 407072,
+   "caption_id": "llava_short-407072",
+   "gid": "g041"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 420546,
+   "caption_id": "llava_short-420546",
+   "gid": "g317"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 443887,
+   "caption_id": "llava_short-443887",
+   "gid": "g096"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 451972,
+   "caption_id": "llava_short-451972",
+   "gid": "g331"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 453297,
+   "caption_id": "llava_short-453297",
+   "gid": "g309"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 458755,
+   "caption_id": "llava_short-458755",
+   "gid": "g272"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 471641,
+   "caption_id": "llava_short-471641",
+   "gid": "g071"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 475403,
+   "caption_id": "llava_short-475403",
+   "gid": "g120"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 491497,
+   "caption_id": "llava_short-491497",
+   "gid": "g097"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 495081,
+   "caption_id": "llava_short-495081",
+   "gid": "g231"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 499198,
+   "caption_id": "llava_short-499198",
+   "gid": "g271"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 506201,
+   "caption_id": "llava_short-506201",
+   "gid": "g246"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 506458,
+   "caption_id": "llava_short-506458",
+   "gid": "g163"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 533013,
+   "caption_id": "llava_short-533013",
+   "gid": "g244"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 539784,
+   "caption_id": "llava_short-539784",
+   "gid": "g118"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 540280,
+   "caption_id": "llava_short-540280",
+   "gid": "g154"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 541478,
+   "caption_id": "llava_short-541478",
+   "gid": "g002"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 562592,
+   "caption_id": "llava_short-562592",
+   "gid": "g350"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 571990,
+   "caption_id": "llava_short-571990",
+   "gid": "g008"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 577866,
+   "caption_id": "llava_short-577866",
+   "gid": "g055"
+  },
+  {
+   "source": "llava_short",
+   "block": "U",
+   "image_id": 580591,
+   "caption_id": "llava_short-580591",
+   "gid": "g299"
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 5388,
+   "caption_id": "human-5388",
+   "gid": "g242",
+   "ref_annotation_id": 510787
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 8775,
+   "caption_id": "human-8775",
+   "gid": "g146",
+   "ref_annotation_id": 203891
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 10526,
+   "caption_id": "human-10526",
+   "gid": "g132",
+   "ref_annotation_id": 677292
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 15667,
+   "caption_id": "human-15667",
+   "gid": "g026",
+   "ref_annotation_id": 356718
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 25521,
+   "caption_id": "human-25521",
+   "gid": "g221",
+   "ref_annotation_id": 619182
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 32400,
+   "caption_id": "human-32400",
+   "gid": "g085",
+   "ref_annotation_id": 96396
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 43289,
+   "caption_id": "human-43289",
+   "gid": "g226",
+   "ref_annotation_id": 610017
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 45587,
+   "caption_id": "human-45587",
+   "gid": "g031",
+   "ref_annotation_id": 179670
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 46761,
+   "caption_id": "human-46761",
+   "gid": "g255",
+   "ref_annotation_id": 265521
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 52386,
+   "caption_id": "human-52386",
+   "gid": "g326",
+   "ref_annotation_id": 302589
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 81656,
+   "caption_id": "human-81656",
+   "gid": "g010",
+   "ref_annotation_id": 131717
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 85562,
+   "caption_id": "human-85562",
+   "gid": "g134",
+   "ref_annotation_id": 76235
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 100661,
+   "caption_id": "human-100661",
+   "gid": "g348",
+   "ref_annotation_id": 492896
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 141256,
+   "caption_id": "human-141256",
+   "gid": "g250",
+   "ref_annotation_id": 201040
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 176863,
+   "caption_id": "human-176863",
+   "gid": "g218",
+   "ref_annotation_id": 741182
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 185721,
+   "caption_id": "human-185721",
+   "gid": "g045",
+   "ref_annotation_id": 548030
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 189806,
+   "caption_id": "human-189806",
+   "gid": "g086",
+   "ref_annotation_id": 482688
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 198641,
+   "caption_id": "human-198641",
+   "gid": "g020",
+   "ref_annotation_id": 571590
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 200739,
+   "caption_id": "human-200739",
+   "gid": "g302",
+   "ref_annotation_id": 506700
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 208589,
+   "caption_id": "human-208589",
+   "gid": "g050",
+   "ref_annotation_id": 100252
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 210012,
+   "caption_id": "human-210012",
+   "gid": "g314",
+   "ref_annotation_id": 278454
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 211186,
+   "caption_id": "human-211186",
+   "gid": "g333",
+   "ref_annotation_id": 227623
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 221700,
+   "caption_id": "human-221700",
+   "gid": "g284",
+   "ref_annotation_id": 741623
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 226368,
+   "caption_id": "human-226368",
+   "gid": "g301",
+   "ref_annotation_id": 436835
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 235692,
+   "caption_id": "human-235692",
+   "gid": "g157",
+   "ref_annotation_id": 8155
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 263258,
+   "caption_id": "human-263258",
+   "gid": "g332",
+   "ref_annotation_id": 545881
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 271607,
+   "caption_id": "human-271607",
+   "gid": "g206",
+   "ref_annotation_id": 610354
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 272262,
+   "caption_id": "human-272262",
+   "gid": "g063",
+   "ref_annotation_id": 655137
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 286176,
+   "caption_id": "human-286176",
+   "gid": "g253",
+   "ref_annotation_id": 701516
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 302599,
+   "caption_id": "human-302599",
+   "gid": "g265",
+   "ref_annotation_id": 62301
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 317999,
+   "caption_id": "human-317999",
+   "gid": "g089",
+   "ref_annotation_id": 17043
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 325593,
+   "caption_id": "human-325593",
+   "gid": "g324",
+   "ref_annotation_id": 201649
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 333018,
+   "caption_id": "human-333018",
+   "gid": "g064",
+   "ref_annotation_id": 776466
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 352127,
+   "caption_id": "human-352127",
+   "gid": "g263",
+   "ref_annotation_id": 390271
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 363594,
+   "caption_id": "human-363594",
+   "gid": "g164",
+   "ref_annotation_id": 791389
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 391006,
+   "caption_id": "human-391006",
+   "gid": "g035",
+   "ref_annotation_id": 506326
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 393031,
+   "caption_id": "human-393031",
+   "gid": "g286",
+   "ref_annotation_id": 385868
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 411138,
+   "caption_id": "human-411138",
+   "gid": "g150",
+   "ref_annotation_id": 240658
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 416405,
+   "caption_id": "human-416405",
+   "gid": "g256",
+   "ref_annotation_id": 739317
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 424975,
+   "caption_id": "human-424975",
+   "gid": "g022",
+   "ref_annotation_id": 705829
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 445041,
+   "caption_id": "human-445041",
+   "gid": "g138",
+   "ref_annotation_id": 45972
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 468933,
+   "caption_id": "human-468933",
+   "gid": "g168",
+   "ref_annotation_id": 218399
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 492132,
+   "caption_id": "human-492132",
+   "gid": "g190",
+   "ref_annotation_id": 592595
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 506872,
+   "caption_id": "human-506872",
+   "gid": "g103",
+   "ref_annotation_id": 104842
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 512183,
+   "caption_id": "human-512183",
+   "gid": "g073",
+   "ref_annotation_id": 778654
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 526319,
+   "caption_id": "human-526319",
+   "gid": "g004",
+   "ref_annotation_id": 112604
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 527631,
+   "caption_id": "human-527631",
+   "gid": "g313",
+   "ref_annotation_id": 325302
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 538976,
+   "caption_id": "human-538976",
+   "gid": "g188",
+   "ref_annotation_id": 71602
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 552654,
+   "caption_id": "human-552654",
+   "gid": "g269",
+   "ref_annotation_id": 807337
+  },
+  {
+   "source": "human",
+   "block": "U",
+   "image_id": 568115,
+   "caption_id": "human-568115",
+   "gid": "g161",
+   "ref_annotation_id": 457519
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 2453,
+   "caption_id": "llava_long-2453",
+   "gid": "g290"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 10400,
+   "caption_id": "llava_long-10400",
+   "gid": "g021"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 20598,
+   "caption_id": "llava_long-20598",
+   "gid": "g074"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 31965,
+   "caption_id": "llava_long-31965",
+   "gid": "g069"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 39081,
+   "caption_id": "llava_long-39081",
+   "gid": "g125"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 40446,
+   "caption_id": "llava_long-40446",
+   "gid": "g102"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 49688,
+   "caption_id": "llava_long-49688",
+   "gid": "g042"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 75173,
+   "caption_id": "llava_long-75173",
+   "gid": "g342"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 84735,
+   "caption_id": "llava_long-84735",
+   "gid": "g153"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 87399,
+   "caption_id": "llava_long-87399",
+   "gid": "g220"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 87617,
+   "caption_id": "llava_long-87617",
+   "gid": "g104"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 108853,
+   "caption_id": "llava_long-108853",
+   "gid": "g044"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 113223,
+   "caption_id": "llava_long-113223",
+   "gid": "g222"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 114941,
+   "caption_id": "llava_long-114941",
+   "gid": "g240"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 125071,
+   "caption_id": "llava_long-125071",
+   "gid": "g129"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 151790,
+   "caption_id": "llava_long-151790",
+   "gid": "g189"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 182683,
+   "caption_id": "llava_long-182683",
+   "gid": "g061"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 185639,
+   "caption_id": "llava_long-185639",
+   "gid": "g191"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 195648,
+   "caption_id": "llava_long-195648",
+   "gid": "g196"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 208516,
+   "caption_id": "llava_long-208516",
+   "gid": "g234"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 211120,
+   "caption_id": "llava_long-211120",
+   "gid": "g059"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 212285,
+   "caption_id": "llava_long-212285",
+   "gid": "g203"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 231685,
+   "caption_id": "llava_long-231685",
+   "gid": "g209"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 260966,
+   "caption_id": "llava_long-260966",
+   "gid": "g065"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 264347,
+   "caption_id": "llava_long-264347",
+   "gid": "g208"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 280909,
+   "caption_id": "llava_long-280909",
+   "gid": "g107"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 291664,
+   "caption_id": "llava_long-291664",
+   "gid": "g047"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 292170,
+   "caption_id": "llava_long-292170",
+   "gid": "g017"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 295728,
+   "caption_id": "llava_long-295728",
+   "gid": "g025"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 325991,
+   "caption_id": "llava_long-325991",
+   "gid": "g078"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 326344,
+   "caption_id": "llava_long-326344",
+   "gid": "g058"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 326968,
+   "caption_id": "llava_long-326968",
+   "gid": "g279"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 361860,
+   "caption_id": "llava_long-361860",
+   "gid": "g258"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 375285,
+   "caption_id": "llava_long-375285",
+   "gid": "g122"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 375324,
+   "caption_id": "llava_long-375324",
+   "gid": "g186"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 391199,
+   "caption_id": "llava_long-391199",
+   "gid": "g123"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 397042,
+   "caption_id": "llava_long-397042",
+   "gid": "g110"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 403421,
+   "caption_id": "llava_long-403421",
+   "gid": "g225"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 409217,
+   "caption_id": "llava_long-409217",
+   "gid": "g160"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 424880,
+   "caption_id": "llava_long-424880",
+   "gid": "g229"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 444302,
+   "caption_id": "llava_long-444302",
+   "gid": "g274"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 468935,
+   "caption_id": "llava_long-468935",
+   "gid": "g340"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 468993,
+   "caption_id": "llava_long-468993",
+   "gid": "g106"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 520108,
+   "caption_id": "llava_long-520108",
+   "gid": "g038"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 525568,
+   "caption_id": "llava_long-525568",
+   "gid": "g214"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 529592,
+   "caption_id": "llava_long-529592",
+   "gid": "g288"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 539904,
+   "caption_id": "llava_long-539904",
+   "gid": "g287"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 552564,
+   "caption_id": "llava_long-552564",
+   "gid": "g100"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 554749,
+   "caption_id": "llava_long-554749",
+   "gid": "g329"
+  },
+  {
+   "source": "llava_long",
+   "block": "L",
+   "image_id": 564091,
+   "caption_id": "llava_long-564091",
+   "gid": "g194"
+  }
+ ]
+}
