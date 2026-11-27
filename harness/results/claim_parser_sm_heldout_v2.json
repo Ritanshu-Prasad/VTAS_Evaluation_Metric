@@ -1,0 +1,263 @@
+{
+ "model": "sm",
+ "part": "heldout",
+ "core": {
+  "tp": 581,
+  "n_parser": 781,
+  "n_ref": 777,
+  "precision": 0.7439180537772087,
+  "recall": 0.7477477477477478,
+  "agreement": 0.7458279845956355
+ },
+ "all": {
+  "tp": 835,
+  "n_parser": 1425,
+  "n_ref": 1165,
+  "precision": 0.5859649122807018,
+  "recall": 0.7167381974248928,
+  "agreement": 0.6447876447876448
+ },
+ "by_source": {
+  "blip": {
+   "tp": 201,
+   "n_parser": 247,
+   "n_ref": 241,
+   "precision": 0.8137651821862348,
+   "recall": 0.8340248962655602,
+   "agreement": 0.8237704918032787
+  },
+  "llava_short": {
+   "tp": 212,
+   "n_parser": 279,
+   "n_ref": 277,
+   "precision": 0.7598566308243727,
+   "recall": 0.7653429602888087,
+   "agreement": 0.762589928057554
+  },
+  "human": {
+   "tp": 168,
+   "n_parser": 255,
+   "n_ref": 259,
+   "precision": 0.6588235294117647,
+   "recall": 0.6486486486486487,
+   "agreement": 0.6536964980544747
+  },
+  "llava_long": {
+   "tp": 254,
+   "n_parser": 644,
+   "n_ref": 388,
+   "precision": 0.3944099378881988,
+   "recall": 0.654639175257732,
+   "agreement": 0.49224806201550386
+  }
+ },
+ "by_type_core": {
+  "object": {
+   "tp": 300,
+   "n_parser": 356,
+   "n_ref": 333,
+   "precision": 0.8426966292134831,
+   "recall": 0.9009009009009009,
+   "agreement": 0.8708272859216255
+  },
+  "count": {
+   "tp": 35,
+   "n_parser": 50,
+   "n_ref": 46,
+   "precision": 0.7,
+   "recall": 0.7608695652173914,
+   "agreement": 0.7291666666666666
+  },
+  "attribute": {
+   "tp": 87,
+   "n_parser": 129,
+   "n_ref": 140,
+   "precision": 0.6744186046511628,
+   "recall": 0.6214285714285714,
+   "agreement": 0.6468401486988847
+  },
+  "relation": {
+   "tp": 100,
+   "n_parser": 177,
+   "n_ref": 194,
+   "precision": 0.5649717514124294,
+   "recall": 0.5154639175257731,
+   "agreement": 0.5390835579514824
+  },
+  "scene": {
+   "tp": 59,
+   "n_parser": 69,
+   "n_ref": 64,
+   "precision": 0.855072463768116,
+   "recall": 0.921875,
+   "agreement": 0.8872180451127819
+  }
+ },
+ "by_source_type": {
+  "blip/object": {
+   "tp": 99,
+   "n_parser": 111,
+   "n_ref": 101,
+   "precision": 0.8918918918918919,
+   "recall": 0.9801980198019802,
+   "agreement": 0.9339622641509434
+  },
+  "blip/count": {
+   "tp": 17,
+   "n_parser": 21,
+   "n_ref": 20,
+   "precision": 0.8095238095238095,
+   "recall": 0.85,
+   "agreement": 0.8292682926829268
+  },
+  "blip/attribute": {
+   "tp": 28,
+   "n_parser": 39,
+   "n_ref": 41,
+   "precision": 0.717948717948718,
+   "recall": 0.6829268292682927,
+   "agreement": 0.7
+  },
+  "blip/relation": {
+   "tp": 34,
+   "n_parser": 52,
+   "n_ref": 55,
+   "precision": 0.6538461538461539,
+   "recall": 0.6181818181818182,
+   "agreement": 0.6355140186915887
+  },
+  "blip/scene": {
+   "tp": 23,
+   "n_parser": 24,
+   "n_ref": 24,
+   "precision": 0.9583333333333334,
+   "recall": 0.9583333333333334,
+   "agreement": 0.9583333333333334
+  },
+  "llava_short/object": {
+   "tp": 112,
+   "n_parser": 130,
+   "n_ref": 126,
+   "precision": 0.8615384615384616,
+   "recall": 0.8888888888888888,
+   "agreement": 0.875
+  },
+  "llava_short/count": {
+   "tp": 6,
+   "n_parser": 10,
+   "n_ref": 10,
+   "precision": 0.6,
+   "recall": 0.6,
+   "agreement": 0.6
+  },
+  "llava_short/attribute": {
+   "tp": 33,
+   "n_parser": 45,
+   "n_ref": 49,
+   "precision": 0.7333333333333333,
+   "recall": 0.673469387755102,
+   "agreement": 0.7021276595744681
+  },
+  "llava_short/relation": {
+   "tp": 44,
+   "n_parser": 73,
+   "n_ref": 74,
+   "precision": 0.6027397260273972,
+   "recall": 0.5945945945945946,
+   "agreement": 0.5986394557823129
+  },
+  "llava_short/scene": {
+   "tp": 17,
+   "n_parser": 21,
+   "n_ref": 18,
+   "precision": 0.8095238095238095,
+   "recall": 0.9444444444444444,
+   "agreement": 0.8717948717948718
+  },
+  "human/object": {
+   "tp": 89,
+   "n_parser": 115,
+   "n_ref": 106,
+   "precision": 0.7739130434782608,
+   "recall": 0.839622641509434,
+   "agreement": 0.8054298642533937
+  },
+  "human/count": {
+   "tp": 12,
+   "n_parser": 19,
+   "n_ref": 16,
+   "precision": 0.631578947368421,
+   "recall": 0.75,
+   "agreement": 0.6857142857142857
+  },
+  "human/attribute": {
+   "tp": 26,
+   "n_parser": 45,
+   "n_ref": 50,
+   "precision": 0.5777777777777777,
+   "recall": 0.52,
+   "agreement": 0.5473684210526316
+  },
+  "human/relation": {
+   "tp": 22,
+   "n_parser": 52,
+   "n_ref": 65,
+   "precision": 0.4230769230769231,
+   "recall": 0.3384615384615385,
+   "agreement": 0.37606837606837606
+  },
+  "human/scene": {
+   "tp": 19,
+   "n_parser": 24,
+   "n_ref": 22,
+   "precision": 0.7916666666666666,
+   "recall": 0.8636363636363636,
+   "agreement": 0.8260869565217391
+  },
+  "llava_long/object": {
+   "tp": 128,
+   "n_parser": 245,
+   "n_ref": 129,
+   "precision": 0.5224489795918368,
+   "recall": 0.9922480620155039,
+   "agreement": 0.6844919786096256
+  },
+  "llava_long/count": {
+   "tp": 31,
+   "n_parser": 70,
+   "n_ref": 34,
+   "precision": 0.44285714285714284,
+   "recall": 0.9117647058823529,
+   "agreement": 0.5961538461538461
+  },
+  "llava_long/attribute": {
+   "tp": 47,
+   "n_parser": 155,
+   "n_ref": 92,
+   "precision": 0.3032258064516129,
+   "recall": 0.5108695652173914,
+   "agreement": 0.3805668016194332
+  },
+  "llava_long/relation": {
+   "tp": 29,
+   "n_parser": 142,
+   "n_ref": 110,
+   "precision": 0.20422535211267606,
+   "recall": 0.2636363636363636,
+   "agreement": 0.23015873015873015
+  },
+  "llava_long/scene": {
+   "tp": 19,
+   "n_parser": 32,
+   "n_ref": 23,
+   "precision": 0.59375,
+   "recall": 0.8260869565217391,
+   "agreement": 0.6909090909090909
+  }
+ },
+ "gate": {
+  "threshold": 0.95,
+  "metric": "pooled core agreement (F1)",
+  "pass": false
+ }
+}
