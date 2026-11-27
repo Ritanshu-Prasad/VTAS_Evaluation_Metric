@@ -1,4 +1,4 @@
-"""Bootstrap confidence intervals and paired bootstrap (plan Section 6.4).
+"""Bootstrap confidence intervals and paired bootstrap.
 
 Rows of ``data`` are the resampling unit (images). A statistic maps the resampled
 array to one float, e.g. :func:`mean` for per-image scores or :func:`ratio_of_sums`

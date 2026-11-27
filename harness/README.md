@@ -1,7 +1,7 @@
 # VTAS evaluation harness
 
 Ground truth, fixed splits, statistics, pre-registered gates and external dataset
-loaders for VTAS 2.0 (plan `docs/ROADMAP_V2.md`, S0.5 and S0.7). Not shipped in the
+loaders for VTAS 2.0. Not shipped in the
 `vtas-metric` wheel. Run everything from the repo root. Install with `pip install -e ".[harness]"`.
 
 Data goes to `$VTAS_DATA` (default `./data/`, gitignored). Never commit data, captions,
@@ -9,7 +9,7 @@ weights or per-image dumps. Commit code, split id lists and small summary JSON o
 
 | File | What |
 |---|---|
-| `gates.yaml` | Gate A–G thresholds from plan 6.2, committed before any result. Do not edit after seeing test numbers. |
+| `gates.yaml` | Gate A–G thresholds, committed before any result. Do not edit after seeing test numbers. |
 | `splits/coco_{calib,dev,test}.txt` | 1,000 / 1,000 / 3,000 COCO val2014 image ids (Karpathy test split, seed 0). `coco_manifest.json` has the hashes. |
 | `chair_gt.py` | CHAIR-GT (CHAIRs, CHAIRi), a faithful port of Rohrbach et al. 2018. |
 | `stats.py` | `bootstrap_ci`, `paired_bootstrap` (1,000 resamples over images, seed 0). |
@@ -28,7 +28,7 @@ python -m harness.datasets                    # status of the external sets
 python -m harness.datasets fetch              # download all fetchable sets
 ```
 
-Protocol (plan 6.1/6.4): fit thresholds on **calib**, tune on **dev**, report once on
+Protocol: fit thresholds on **calib**, tune on **dev**, report once on
 **test**. Never report calib numbers.
 
 Access flags: Pascal-50S has no working download, Flickr8k needs a sign-up form at the

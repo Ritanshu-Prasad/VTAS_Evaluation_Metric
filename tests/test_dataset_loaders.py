@@ -1,4 +1,4 @@
-"""Loader tests (plan S0.7).
+"""Loader tests.
 
 Two layers per dataset:
   * fixture tests: a tiny file in the dataset's native format is parsed (always run, CI);

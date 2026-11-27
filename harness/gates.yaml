@@ -1,11 +1,11 @@
-# VTAS 2.0 validation gates (docs/ROADMAP_V2.md, Section 6.2).
+# VTAS 2.0 validation gates.
 #
 # Pre-registered: this file was committed BEFORE any VTAS 2.0 result was computed.
 # Thresholds must never be changed after test-split numbers have been seen.
 # Any change needs a new commit that states why and confirms the test split
 # was not looked at; a reviewer can check this file's git history.
 #
-# Protocol (Section 6.1 / 6.4): thresholds are fitted on calib, tuned on dev,
+# Protocol: thresholds are fitted on calib, tuned on dev,
 # reported once on test. Every number carries a bootstrap 95% CI
 # (1,000 resamples over images, seed fixed). The calib split is never reported.
 #
@@ -14,7 +14,7 @@
 # on the same data"; "gt_baseline" means strictly above it. "report" has no threshold.
 
 version: 1
-source: docs/ROADMAP_V2.md#62-gates-must-pass-before-the-paper-is-written
+source: pre-registered validation protocol (2026-11-13)
 statistics:
   ci_level: 0.95
   bootstrap_resamples: 1000
@@ -61,7 +61,7 @@ gates:
 
   F:
     statement: Policy is standardizable
-    reference: golden set (S0.6)
+    reference: golden set
     criteria:
       - {metric: annotator_cohen_kappa_verdicts, op: ">=", threshold: 0.7}
       - {metric: policy_agreement_with_adjudicated_labels, op: ">=", threshold: 0.9}
