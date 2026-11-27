@@ -6,11 +6,11 @@ Writes ``$VTAS_DATA/captions/blip_orig_paper_<split>.json`` = {"config": ..., "c
 {image_id: caption}}. Captions are data and are not committed.
 
 Why not Hugging Face. ``Salesforce/blip-image-captioning-base`` (used by
-``caption_blip.py`` in Chat 1) never emits WordPiece continuation tokens: on the dev split
+``caption_blip.py``) never emits WordPiece continuation tokens: on the dev split
 it writes "a gi in a zoo" for giraffe, "frc" for frisbee, "fire hydra", and loops such as
 "pew pew pew ...". It does the same under transformers 4.36.2 and 4.46.3. The original
-BLIP code with the COCO caption checkpoint writes the full words on the same images
-(Chat 2 diagnosis, PROGRESS.md). CHAIR results must use this module.
+BLIP code with the COCO caption checkpoint writes the full words on the same images.
+CHAIR results must use this module.
 
 Model. BLIP ViT-B/16, checkpoint ``model_base_caption_capfilt_large.pth`` (BLIP paper,
 COCO captioning, CapFilt-L), the checkpoint named in the repo's configs/caption_coco.yaml.

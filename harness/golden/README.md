@@ -1,7 +1,7 @@
 # Golden Set Annotation Rubric (v1, draft)
 
-This rubric is for the people who label the VTAS golden set (plan S0.6). It turns
-Concept Policy v1 (`policy/concept_policy_v1.yaml`, plan Section 4) into rules a human
+This rubric is for the people who label the VTAS golden set. It turns
+Concept Policy v1 (`policy/concept_policy_v1.yaml`) into rules a human
 can apply to one image and one caption. Read it once in full before labelling, and keep
 it open while you work.
 
@@ -12,7 +12,7 @@ The golden set has two uses:
 2. **Ground truth for VTAS 2.0.** This covers claim-level verdicts and the count
    judgements that fix the "several / group / crowd / many" intervals.
 
-Labels come from two humans, who work independently. Claude pre-labels sit in a separate
+Labels come from two humans, who work independently. Model pre-labels sit in a separate
 column of the adjudication file. Annotators never see them, and they never count as an
 annotator.
 
@@ -96,7 +96,7 @@ Every claim has one of five types. The `claim_text` follows a fixed shape for ea
 - **Subjective or non-visual content still gets a row:** "delicious", "for sale", "of
   great interest to them". These are usually `unverifiable` (see 3).
 
-The draft segmentation was made by Claude from the caption **text only**, before anyone
+The draft segmentation was made automatically from the caption **text only**, before anyone
 looked at the images. It contains no verdicts. The owner reviews it before labelling
 starts.
 
@@ -144,7 +144,7 @@ depictions. Examples: a dog on a TV screen; "stuffed bears" for teddy bears.
 
 ---
 
-## 4. Counts (Policy v1, Section 4.2)
+## 4. Counts
 
 ### 4.1 Interval table
 
@@ -157,7 +157,7 @@ the **standard** profile:
 | "two X", "three X", … (N) | [N, N] | [N, N] | [N−1, N+1] |
 | bare plural "Xs", "some X", "a few X" | [2, ∞) | [2, ∞) | [2, ∞) |
 | "a couple of X", "a pair of X" | [2, 2] | [2, 2] | [2, 3] |
-| "several X" | **fit from data** (plan prior [3, ∞)) | | |
+| "several X" | **fit from data** (prior [3, ∞)) | | |
 | "a group of X" (also "a bunch of", "a herd of", "multiple", "lots of") | **fit from data** (prior [3, ∞)) | | |
 | "a crowd", "crowds" | **fit from data** (prior [6, ∞)) | | |
 | "many X", "a lot of X" | **fit from data** (prior [6, ∞)) | | |
@@ -197,7 +197,7 @@ phrases. Example: for "a man and two people" you need three people in total.
 
 ---
 
-## 5. Specific versus general terms (Policy v1, Section 4.1)
+## 5. Specific versus general terms
 
 - **General terms.** A general term (person, animal, vehicle, food, dish, plant) is
   `supported` by any visible instance of a more specific kind. "A person" is supported by
@@ -263,7 +263,7 @@ your adjudicated labels, so mismatches of this kind are what the gate is meant t
    `data/golden/annotator_A.xlsx`, `annotator_B.xlsx` and `adjudication.xlsx`. These are
    not committed.
 3. **Independent labelling.** Each annotator fills in their own copy.
-   - Neither looks at the other's file, at the adjudication file or at Claude's
+   - Neither looks at the other's file, at the adjudication file or at the model
      pre-labels.
    - Label all 350 captions. Core agreement is computed on blocks P and U.
 4. **Agreement on the 300-caption core.**
@@ -285,7 +285,7 @@ your adjudicated labels, so mismatches of this kind are what the gate is meant t
    This copies both labels into `adjudication.xlsx`. The adjudicator fills in
    `final_verdict` and `final_visible_count`, plus `adjudication_note` when the two
    annotators disagreed.
-   - Claude pre-labels may be shown to the adjudicator only after both annotations are
+   - Model pre-labels may be shown to the adjudicator only after both annotations are
      final.
    - Their agreement with the final labels is reported separately.
 6. **Fit the vague-quantifier intervals.** Use the adjudicated `visible_count` on

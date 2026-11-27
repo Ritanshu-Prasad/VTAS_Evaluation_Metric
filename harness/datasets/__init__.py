@@ -1,4 +1,4 @@
-"""External evaluation sets (plan S0.7): sources, checksums and download.
+"""External evaluation sets: sources, checksums and download.
 
 Every file has a pinned URL (a commit, a fixed file id or a fixed object) and a
 SHA-256 recorded when it was first downloaded (2026-11-13). Loaders verify the

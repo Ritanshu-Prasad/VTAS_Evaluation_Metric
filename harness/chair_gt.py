@@ -127,7 +127,7 @@ class ChairResult:
 
     def confidence_intervals(self, n_resamples: int = 1000, ci: float = 0.95,
                              seed: int = 0) -> dict[str, CI]:
-        """Bootstrap CIs over images (plan Section 6.4)."""
+        """Bootstrap CIs over images."""
         counts = self.per_image_counts()
         return {
             "CHAIRs": bootstrap_ci(counts[:, [0, 1]], ratio_of_sums, n_resamples, ci, seed),

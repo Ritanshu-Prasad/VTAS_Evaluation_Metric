@@ -10,7 +10,7 @@ are looked up in harness/golden/golden_ids.json for the per-source breakdown and
 ``--blocks``. Rows are matched on
 ``claim_id``. A claim counts only when both annotators labelled it; claims missing from
 one file or left blank are reported, not imputed. Claude pre-label columns are ignored:
-Claude is never an annotator (plan S0.6).
+Claude is never an annotator.
 
 Statistics (nominal data):
   * Cohen's kappa (two raters):  (p_o - p_e) / (1 - p_e).
@@ -19,7 +19,7 @@ Statistics (nominal data):
     missing values, so units labelled by only one coder are dropped automatically.
   * 95% percentile bootstrap CI for kappa, resampling images (claims of one caption,
     and the three captions of a paired image, are not independent; the unit is the
-    ``image_id`` column, else the caption), 1,000 resamples, seed 0 (plan 6.4).
+    ``image_id`` column, else the caption), 1,000 resamples, seed 0.
 The gate F threshold for ``annotator_cohen_kappa_verdicts`` is read from
 harness/gates.yaml, never hard-coded here.
 """

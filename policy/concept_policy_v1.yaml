@@ -1,20 +1,20 @@
-# VTAS Concept Policy v1 -- DRAFT (docs/ROADMAP_V2.md, Section 4).
+# VTAS Concept Policy v1 -- DRAFT.
 #
-# Status: draft written in Chat 2 (golden set). Not loaded by any code yet; VTAS 1.x is
-# unaffected. The plan places the runtime copy at vtas/policy/concept_policy_v1.yaml
+# Status: draft, written with the golden set. Not loaded by any code yet; VTAS 1.x is
+# unaffected. The runtime copy will live at vtas/policy/concept_policy_v1.yaml
 # (shipped in the package); it moves there when the 2.0 verdict engine loads it.
 #
 # Rules for editing:
 #   * Values marked fit_from_data are fitted ONCE on the golden-set human count
 #     judgments (visible_count column, adjudicated), then frozen here with a commit
 #     that records the fit (n, method, date). They are never tuned on test numbers.
-#   * The paper states the policy version used. Any change to a frozen value is a new
+#   * Published results state the policy version used. Any change to a frozen value is a new
 #     policy version (concept_policy_v2.yaml), not an edit of v1.
 
 policy: concept_policy
 version: "1.0.0-draft"
 status: draft
-source: docs/ROADMAP_V2.md#4-concept-policy-v1-standardization
+source: VTAS 2.0 concept policy (draft)
 
 verdicts: [SUPPORTED, CONTRADICTED, UNVERIFIABLE]
 claim_types: [object, count, attribute, relation, scene]
@@ -51,7 +51,7 @@ specific_vs_general:
     example: {term: boy, parent: person, soft_check: [age, gender]}
   hyponym_sets:
     sources: [wordnet, reviewed_override_file]
-    override_file: policy/hyponym_overrides_v1.yaml   # to be written (Chat 3/8)
+    override_file: policy/hyponym_overrides_v1.yaml   # to be written
     embedding_similarity_for_synonymy: false          # MiniLM no longer used for synonymy
 
 # ---- 4.2 Counts and collective nouns ----------------------------------------------------

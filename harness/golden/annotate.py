@@ -1,4 +1,4 @@
-"""Golden-set annotation files (plan S0.6).
+"""Golden-set annotation files.
 
     python -m harness.golden.annotate template          # committed blank template
     python -m harness.golden.annotate build [--force] [--partial]  # annotator + adjudication files
@@ -34,7 +34,7 @@ TEMPLATE_DIR = HARNESS_DIR / "golden" / "templates"
 TYPE_CODES = {"o": "object", "c": "count", "a": "attribute", "r": "relation", "s": "scene"}
 FLAGS = ("not_a_claim", "wrong_type", "should_split", "should_merge", "unclear_text")
 IMAGE_URL = "http://images.cocodataset.org/val2014/COCO_val2014_{:012d}.jpg"
-RUBRIC = "docs/GOLDEN_SET_RUBRIC.md"
+RUBRIC = "harness/golden/README.md"
 
 ANNOTATOR_COLUMNS = ["claim_id", "caption_gid", "image_id", "image_url", "caption", "claim_no",
                      "type", "claim_text", "verdict", "visible_count", "flag", "note"]
@@ -134,7 +134,7 @@ def build_rows(design: dict, texts: dict[str, str], claims: dict) -> tuple[list[
 # ---- workbook writing --------------------------------------------------------------------
 
 README_LINES = [
-    "VTAS golden set - annotator workbook (plan S0.6)",
+    "VTAS golden set - annotator workbook",
     "",
     f"Read the rubric first: {RUBRIC} in the repository.",
     "Label every row of the 'claims' sheet on your own. Do not discuss labels with the other",

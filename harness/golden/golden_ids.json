@@ -1,5 +1,5 @@
 {
- "description": "Golden set captions (plan S0.6). See harness/golden/design.py.",
+ "description": "Golden set captions. See harness/golden/design.py.",
  "split": "dev",
  "seed": 0,
  "n_images": 200,

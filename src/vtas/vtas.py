@@ -173,7 +173,7 @@ class VTASEvaluator:
                 - 'vtas_score': The final VTAS score (float, 0 to 1).
                 - 'precision': 1 - |hallucinated| / |caption nouns|.
                 - 'recall': Saliency-weighted fraction of detected objects
-                  mentioned (see the module docstring and docs/architecture.md).
+                  mentioned (see the module docstring and the README).
                 - 'detected_objects': Set of objects found by DETR.
                 - 'text_nouns': Set of nouns extracted from the caption.
                 - 'matched': List of (noun, object, score) from Tier 1.

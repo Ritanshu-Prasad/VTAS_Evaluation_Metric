@@ -1,8 +1,8 @@
-"""Which captions go into the golden set (plan S0.6). Deterministic from the dev split.
+"""Which captions go into the golden set. Deterministic from the dev split.
 
     python -m harness.golden.design      # writes harness/golden/golden_ids.json
 
-Design (owner decision, Chat 2): 200 dev images, seed 0.
+Design: 200 dev images, seed 0.
   * paired block P: 50 images, each captioned by BLIP, LLaVA-1.5 (short) and a human
     reference -> 150 captions. Lets sources be compared on the same images.
   * unpaired block U: 150 further images, 50 per source -> 150 captions. More images
@@ -10,7 +10,7 @@ Design (owner decision, Chat 2): 200 dev images, seed 0.
   * core set = P + U = 100 BLIP + 100 LLaVA-short + 100 human = 300 captions.
   * extension block L: LLaVA-1.5 long ("describe in detail") on the 50 P images. Kept
     separate so short- and long-caption behaviour of the metric can be compared; it
-    is not part of the 300-caption core and not part of the S0.6 kappa gate.
+    is not part of the 300-caption core and not part of the kappa gate (Gate F).
 The human caption is one of the image's official references (captions_val2014.json),
 drawn with the same seed; its annotation id is stored so the text can be rebuilt.
 
@@ -84,7 +84,7 @@ def build(seed: int = SEED) -> dict:
         choose_references(items, json.load(f), seed)
     images = sorted({it["image_id"] for it in items})
     return {
-        "description": "Golden set captions (plan S0.6). See harness/golden/design.py.",
+        "description": "Golden set captions. See harness/golden/design.py.",
         "split": "dev",
         "seed": seed,
         "n_images": len(images),
