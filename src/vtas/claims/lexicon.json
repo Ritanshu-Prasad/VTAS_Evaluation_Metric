@@ -613,5 +613,19 @@
   "up",
   "away",
   "out"
+ ],
+ "room_scenes": [
+  "kitchen",
+  "bathroom",
+  "bedroom",
+  "living room",
+  "room",
+  "church",
+  "garden",
+  "station",
+  "train station",
+  "market",
+  "street market",
+  "museum"
  ]
 }

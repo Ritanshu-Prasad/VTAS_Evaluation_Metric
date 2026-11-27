@@ -72,6 +72,7 @@ class ClaimParser:
         self.inverse = L["inverse_verbs"]
         self.holders = set(L["holder_nouns"])
         self.aliases = L["scene_aliases"]
+        self.rooms = set(L["room_scenes"])
         self.animate = set(L["animate_nouns"])
         self.state_verbs = set(L["state_verbs"])
         self.name_dets = set(L["name_determiners"])
@@ -566,6 +567,16 @@ class _Run:
             if t.lower_ == "of":
                 continue
             if e.scene:
+                if e.name in p.rooms and info[0] == "with" and not info[2]:
+                    names = []
+                    for o in info[1]:
+                        oe = self.ents.get(o.i)
+                        if oe is not None and oe.name and not oe.scene and not oe.stop:
+                            names.append(oe.name)
+                    if names:
+                        joined = names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+                        self.add("relation", f"{e.name} / with / {joined}", [t], subject=e.name,
+                                 predicate="with", object=joined)
                 continue
             if info[2] and not self._place_relative(info):
                 if all(self.ents.get(o.i) and self.ents[o.i].scene for o in info[1]):
