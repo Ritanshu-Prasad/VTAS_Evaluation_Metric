@@ -244,6 +244,9 @@ def print_failures(res: dict, texts: dict, limit_per_cat: int = 400) -> None:
 
 
 def run_parser(model: str, ids: list[str], texts: dict) -> dict:
+    import sys
+    from harness import REPO_ROOT
+    sys.path.insert(0, str(REPO_ROOT / "src"))  # the checkout, not an older installed vtas
     from vtas.claims import ClaimParser
     parser = ClaimParser(model=model)
     return {cid: [(c.type, c.text) for c in parser.parse(texts[cid]).claims] for cid in ids}

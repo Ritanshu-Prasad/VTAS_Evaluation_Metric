@@ -41,3 +41,40 @@ See `harness/datasets/__init__.py`.
 
 Overlap: all 500 THumB images are in the splits (104 calib, 95 dev, 301 test). FOIL
 test covers 793 calib, 823 dev and 2,400 test images. Exclude calib images when reporting on these sets.
+
+## Claim parser agreement
+
+The VTAS 2.0 claim parser (`src/vtas/claims/`) turns a caption into typed claims: `object`, `count`, `attribute`, `relation` and `scene`. Count intervals are read from `policy/concept_policy_v1.yaml`, never from code.
+
+```python
+from vtas.claims import ClaimParser, ConceptPolicy
+parser = ClaimParser(model="sm")            # "trf" (en_core_web_trf) is the default
+r = parser.parse("two brown dogs on a couch")
+for c in r.claims:
+    print(c.type, c.text)                   # object dogs / count two dogs / attribute dogs: brown / ...
+r.of_type("count")[0].interval(ConceptPolicy.load(), "lenient")
+```
+
+`several`, `group`, `crowd` and `many` return a provisional prior interval until the fitted values are frozen in the policy file.
+
+**Metric.** Fixed before the parser was first run (`harness/golden/claim_agreement.py`):
+
+- A claim is `(type, normalised text)`: lower-case, articles removed, punctuation other than the ` / ` and `: ` separators removed.
+- Parser and reference claims are matched per caption as multisets and summed over captions; agreement is F1 = 2TP / (P + R).
+- Target: pooled agreement of at least 95% over the 300-caption core (BLIP, LLaVA short, human), with a bootstrap 95% CI over images. LLaVA long captions are reported separately.
+- Split (`harness/golden/claim_parser_split.json`): 175 dev and 175 held-out captions, by image id, stratified by block and source, seed 0. Rules are developed on dev only; held-out is evaluated once.
+
+```
+python -m harness.golden.claim_agreement --model {sm,trf} --part {dev,heldout,all}
+```
+
+**Current result** (reference lists after convention normalisation, `harness/results/claim_parser_*_v2.json`):
+
+| spaCy model | Dev | Held-out |
+|---|---|---|
+| `en_core_web_trf` | 85.6% | 77.9% |
+| `en_core_web_sm` | 82.6% | 74.6% |
+
+The 95% target is not met yet. Most of the remaining disagreement comes from the reference lists rather than the parser: the same construction is segmented differently in different captions, and some rows need world knowledge or coreference ("skateboarding" as `boy / riding / skateboard`, "he" as `man`). The remaining parser errors are mainly prepositional-phrase attachment, nested "of" phrases and coordination. The result files without the `_v2` suffix are the measurements taken before normalisation.
+
+**Limits.** The reference lists were drafted automatically and reviewed by the author; they are not independent human segmentations. Coreference ("he", "it") is not resolved, and there is no LLM-based extraction mode yet.
